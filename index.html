@@ -160,10 +160,11 @@
                 padding: 15px;
             }
             /* Scale paper down to fit mobile screen, preserving A4 ratio */
-            #paper {
-                width: 90vw;
-                height: calc(90vw * 1.414);
-                padding: 15vw 10vw;
+            #paper, #rendered-image {
+                width: 90vw !important;
+                height: calc(90vw * 1.414) !important;
+                padding: 15vw 10vw !important;
+                box-sizing: border-box;
             }
             #score-title {
                 font-size: 6vw;
@@ -187,13 +188,17 @@
                 visibility: visible;
             }
             #paper {
+                display: flex !important;
                 position: absolute;
                 left: 0;
                 top: 0;
                 box-shadow: none;
-                width: 210mm;
-                height: 297mm;
-                padding: 50mm 40mm;
+                width: 210mm !important;
+                height: 297mm !important;
+                padding: 50mm 40mm !important;
+            }
+            #rendered-image {
+                display: none !important;
             }
             @page {
                 size: A4;
@@ -241,6 +246,10 @@
 
         <button onclick="generateScore()">Generate Score</button>
         <button onclick="window.print()">Print / Save as PDF</button>
+        
+        <div style="font-size: 0.8rem; color: #aaa; margin-top: 10px;">
+            💡 On mobile, long-press the paper to save it as an image.
+        </div>
     </div>
 
     <div id="preview-area">
@@ -249,8 +258,10 @@
             <div id="score-content"></div>
             <div id="score-footer"></div>
         </div>
+        <img id="rendered-image" style="display: none; width: 210mm; height: 297mm; box-shadow: 0 5px 15px rgba(0,0,0,0.5); object-fit: contain;">
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
         const templates = [
             // Observational / Time-based
@@ -325,8 +336,14 @@
             const listSelect = document.getElementById('list-select').value;
             const isTypewriter = fontSelect === 'font-typewriter';
             
-            // Set Font
             const paper = document.getElementById('paper');
+            const renderedImage = document.getElementById('rendered-image');
+
+            // Reset view to DOM for generation
+            paper.style.display = 'flex';
+            renderedImage.style.display = 'none';
+
+            // Set Font
             paper.className = fontSelect;
 
             // Process title
@@ -366,6 +383,19 @@
             document.getElementById('score-title').innerHTML = applyAnalogDistortion(title, isTypewriter);
             document.getElementById('score-content').innerHTML = applyAnalogDistortion(formattedContent, isTypewriter);
             document.getElementById('score-footer').innerHTML = applyAnalogDistortion(footerText, isTypewriter);
+
+            // Give the browser a moment to render the text and fonts, then convert to image
+            setTimeout(() => {
+                html2canvas(paper, { 
+                    scale: 2, // High resolution
+                    useCORS: true,
+                    backgroundColor: "#fcf9f2" // Ensure background color is captured
+                }).then(canvas => {
+                    renderedImage.src = canvas.toDataURL("image/jpeg", 0.9);
+                    paper.style.display = 'none';
+                    renderedImage.style.display = 'block';
+                });
+            }, 300);
         }
 
         // Initialize events
