@@ -307,23 +307,31 @@
 
         function applyAnalogDistortion(text, isTypewriter) {
             let resultHTML = "";
-            for (let i = 0; i < text.length; i++) {
-                const char = text[i];
-                if (char === " " || char === "\n") {
-                    resultHTML += char;
-                    continue;
+            // Split by whitespace to keep words together, capturing the whitespace
+            const tokens = text.split(/([\s\n]+)/);
+            
+            for (let i = 0; i < tokens.length; i++) {
+                const token = tokens[i];
+                if (token.match(/^[\s\n]+$/)) {
+                    resultHTML += token;
+                } else {
+                    // Wrap the word to prevent mid-word breaking (Western typesetting rules)
+                    resultHTML += `<span class="word" style="white-space: nowrap;">`;
+                    for (let j = 0; j < token.length; j++) {
+                        const char = token[j];
+                        const maxShift = isTypewriter ? 0.8 : 0.2; 
+                        const maxRotate = isTypewriter ? 2 : 0.5;
+                        const minOpacity = isTypewriter ? 0.75 : 0.9;
+
+                        const shiftY = (Math.random() * maxShift * 2 - maxShift).toFixed(2);
+                        const shiftX = (Math.random() * maxShift - maxShift/2).toFixed(2); 
+                        const rotate = (Math.random() * maxRotate * 2 - maxRotate).toFixed(2);
+                        const opacity = (Math.random() * (1 - minOpacity) + minOpacity).toFixed(2);
+
+                        resultHTML += `<span class="char" style="transform: translate(${shiftX}px, ${shiftY}px) rotate(${rotate}deg); opacity: ${opacity};">${char}</span>`;
+                    }
+                    resultHTML += `</span>`;
                 }
-
-                const maxShift = isTypewriter ? 0.8 : 0.2; 
-                const maxRotate = isTypewriter ? 2 : 0.5;
-                const minOpacity = isTypewriter ? 0.75 : 0.9;
-
-                const shiftY = (Math.random() * maxShift * 2 - maxShift).toFixed(2);
-                const shiftX = (Math.random() * maxShift - maxShift/2).toFixed(2); 
-                const rotate = (Math.random() * maxRotate * 2 - maxRotate).toFixed(2);
-                const opacity = (Math.random() * (1 - minOpacity) + minOpacity).toFixed(2);
-
-                resultHTML += `<span class="char" style="transform: translate(${shiftX}px, ${shiftY}px) rotate(${rotate}deg); opacity: ${opacity};">${char}</span>`;
             }
             return resultHTML;
         }
