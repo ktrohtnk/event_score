@@ -47,7 +47,7 @@
             color: #ccc;
         }
 
-        input[type="text"], input[type="password"], select, button {
+        input[type="text"], select, button {
             padding: 8px;
             font-size: 0.95rem;
             border: 1px solid #555;
@@ -56,38 +56,17 @@
             color: #fff;
         }
 
-        .api-key-section {
-            background-color: #2a2a2a;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px dashed #555;
-            margin-bottom: 10px;
-        }
-
-        .api-key-section input {
-            width: 100%;
-            box-sizing: border-box;
-            font-family: monospace;
-            font-size: 0.8rem;
-        }
-
         button {
             background-color: #444;
             cursor: pointer;
             transition: background-color 0.2s;
-            margin-top: 5px;
+            margin-top: 10px;
             border: 1px solid #666;
             padding: 10px;
         }
 
         button:hover {
             background-color: #666;
-        }
-
-        button:disabled {
-            background-color: #333;
-            color: #777;
-            cursor: not-allowed;
         }
 
         /* Preview Area */
@@ -194,16 +173,6 @@
     <div id="ui-panel">
         <h1>Fluxus Score Generator</h1>
         
-        <div class="api-key-section">
-            <label>
-                Gemini API Key:
-                <input type="password" id="api-key-input" placeholder="Paste your key here (AIza...)">
-            </label>
-            <div style="font-size: 0.75rem; color: #999; margin-top: 5px;">
-                Key is saved in your browser locally.
-            </div>
-        </div>
-
         <label>
             Event Name:
             <input type="text" id="event-input" placeholder="e.g., WATER EVENT" value="WATER EVENT">
@@ -236,31 +205,60 @@
             </select>
         </label>
 
-        <button id="generate-btn" onclick="generateScore()">Generate Score (AI)</button>
+        <button onclick="generateScore()">Generate Score</button>
         <button onclick="window.print()">Print / Save as PDF</button>
     </div>
 
     <div id="preview-area">
         <div id="paper" class="font-typewriter">
             <div id="score-title">WATER EVENT</div>
-            <div id="score-content">Enter API key and click Generate.</div>
+            <div id="score-content"></div>
             <div id="score-footer"></div>
         </div>
     </div>
 
     <script>
-        // Load API key from local storage on load
-        window.onload = () => {
-            const savedKey = localStorage.getItem('gemini_api_key');
-            if (savedKey) {
-                document.getElementById('api-key-input').value = savedKey;
-            }
-        };
+        const templates = [
+            // Observational / Time-based
+            ["Observe the {noun} until it disappears."],
+            ["Stare at the {noun} until you can no longer recognize it."],
+            ["Listen to the {noun} for exactly one year."],
+            ["Imagine a {noun} in an empty room.", "Do not open the door."],
+            ["Wait for the {noun} to make a sound.", "Leave immediately."],
+            
+            // Destructive / Transformative
+            ["Take a {noun}.", "Cut it into 1000 pieces.", "Throw them into the wind."],
+            ["Bury the {noun}.", "Dig it up in 10 years."],
+            ["Light a match.", "Watch the {noun} burn.", "Collect the ashes."],
+            ["Melt the {noun}."],
+            ["Paint the {noun} completely black."],
+            ["Boil the {noun}.", "Drink the water."],
 
-        // Save API key when changed
-        document.getElementById('api-key-input').addEventListener('change', (e) => {
-            localStorage.setItem('gemini_api_key', e.target.value.trim());
-        });
+            // Relational / Social
+            ["Send a {noun} to a friend.", "Wait for a reply."],
+            ["Exchange your {noun} with a stranger."],
+            ["Give the {noun} to the first person you meet."],
+            ["Tell a secret to the {noun}.", "Forget the secret."],
+
+            // Spatial / Object manipulation
+            ["Place the {noun} under a piano."],
+            ["Draw a line around the {noun}.", "Never cross the line."],
+            ["Put a {noun} inside another {noun}."],
+            ["Keep the {noun} in your pocket for a year."],
+            ["A {noun} is placed on a pedestal.", "Audience leaves."],
+            ["Drop a {noun} from a great height.", "Listen to the impact."],
+            ["Nail a {noun} to the wall."],
+            ["Hide a {noun} in a museum."],
+
+            // Conceptual / Absurd
+            ["Do not think about {noun}."],
+            ["Count every {noun} in the world."],
+            ["Breathe in.", "Become the {noun}.", "Breathe out."],
+            ["Find a {noun}.", "Pretend it is something else."],
+            ["A {noun} that cannot be seen.", "A {noun} that cannot be touched."],
+            ["Make a {noun} out of ice.", "Watch it return to water."],
+            ["Spell the word '{noun}' backwards.", "Repeat until meaningless."]
+        ];
 
         function applyAnalogDistortion(text, isTypewriter) {
             let resultHTML = "";
@@ -285,20 +283,13 @@
             return resultHTML;
         }
 
-        async function generateScore() {
-            const apiKey = document.getElementById('api-key-input').value.trim();
-            if (!apiKey) {
-                alert("Please enter a Gemini API Key first.");
-                return;
-            }
-
+        function generateScore() {
             const input = document.getElementById('event-input').value.trim();
             const author = document.getElementById('signature-input').value.trim();
             const dateStr = document.getElementById('date-input').value.trim();
             const fontSelect = document.getElementById('font-select').value;
             const listSelect = document.getElementById('list-select').value;
             const isTypewriter = fontSelect === 'font-typewriter';
-            const genBtn = document.getElementById('generate-btn');
             
             // Set Font
             const paper = document.getElementById('paper');
@@ -311,87 +302,47 @@
             let noun = title.replace(/ EVENT$/i, '').toLowerCase().trim();
             if (!noun) noun = "it";
 
-            // Show loading state
-            document.getElementById('score-title').innerHTML = title;
-            document.getElementById('score-content').innerHTML = "Generating...";
-            document.getElementById('score-footer').innerHTML = "";
-            genBtn.disabled = true;
-            genBtn.innerText = "Generating...";
+            // Process steps from random template
+            const randomSteps = templates[Math.floor(Math.random() * templates.length)];
+            let formattedContent = "";
+            randomSteps.forEach((step, index) => {
+                let processedStep = step.replace(/{noun}/g, noun);
+                processedStep = processedStep.charAt(0).toUpperCase() + processedStep.slice(1);
 
-            try {
-                // Call Google Gemini API directly from browser
-                const prompt = `You are a Fluxus artist like George Brecht or Yoko Ono. 
-Write a very short, minimalist, absurd, or poetic instructional 'event score' based on the word '${noun}'.
-It must be 1 to 3 short sentences. 
-Do not include any title, intro, or explanation. 
-Output ONLY the instruction text.`;
-
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-                
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }]
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                if (listSelect === "bullet") {
+                    formattedContent += "●  " + processedStep + "\n";
+                } else if (listSelect === "number") {
+                    formattedContent += (index + 1) + ". " + processedStep + "\n";
+                } else {
+                    formattedContent += processedStep + "\n";
                 }
+            });
 
-                const data = await response.json();
-                
-                // Process generated text
-                let generatedText = data.candidates[0].content.parts[0].text.trim();
-                
-                // Split into steps by lines or sentences if list is requested
-                let steps = generatedText.split('\n').filter(s => s.trim().length > 0);
-                if (steps.length === 1 && steps[0].split('. ').length > 1 && listSelect !== 'none') {
-                    steps = steps[0].split('. ').map(s => s.trim() + (s.endsWith('.') ? '' : '.'));
-                }
-
-                let formattedContent = "";
-                steps.forEach((step, index) => {
-                    let processedStep = step.trim();
-                    if (listSelect === "bullet") {
-                        formattedContent += "●  " + processedStep + "\n";
-                    } else if (listSelect === "number") {
-                        formattedContent += (index + 1) + ". " + processedStep + "\n";
-                    } else {
-                        formattedContent += processedStep + "\n";
-                    }
-                });
-
-                // Process footer
-                let footerText = "";
-                if (author && dateStr) {
-                    footerText = author + "\n" + dateStr;
-                } else if (author) {
-                    footerText = author;
-                } else if (dateStr) {
-                    footerText = dateStr;
-                }
-
-                // Apply analog typewriter distortion
-                document.getElementById('score-title').innerHTML = applyAnalogDistortion(title, isTypewriter);
-                document.getElementById('score-content').innerHTML = applyAnalogDistortion(formattedContent, isTypewriter);
-                document.getElementById('score-footer').innerHTML = applyAnalogDistortion(footerText, isTypewriter);
-            } catch (err) {
-                document.getElementById('score-content').innerHTML = "Error generating score. Check API key.";
-                console.error(err);
-            } finally {
-                genBtn.disabled = false;
-                genBtn.innerText = "Generate Score (AI)";
+            // Process footer (Signature and Date)
+            let footerText = "";
+            if (author && dateStr) {
+                footerText = author + "\n" + dateStr;
+            } else if (author) {
+                footerText = author;
+            } else if (dateStr) {
+                footerText = dateStr;
             }
+
+            // Apply analog typewriter distortion
+            document.getElementById('score-title').innerHTML = applyAnalogDistortion(title, isTypewriter);
+            document.getElementById('score-content').innerHTML = applyAnalogDistortion(formattedContent, isTypewriter);
+            document.getElementById('score-footer').innerHTML = applyAnalogDistortion(footerText, isTypewriter);
         }
 
         // Initialize events
         document.getElementById('font-select').addEventListener('change', function() {
             document.getElementById('paper').className = this.value;
+            generateScore();
         });
+        document.getElementById('list-select').addEventListener('change', generateScore);
+
+        // Generate initial score
+        generateScore();
     </script>
 </body>
 </html>
