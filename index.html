@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluxus Event Score Generator</title>
+    <style>
+        /* Base styling */
+        body {
+            background-color: #2c2c2c;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+        }
+
+        /* UI Panel */
+        #ui-panel {
+            width: 320px;
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+            z-index: 10;
+            overflow-y: auto;
+        }
+
+        #ui-panel h1 {
+            font-size: 1.2rem;
+            margin-top: 0;
+            border-bottom: 1px solid #444;
+            padding-bottom: 10px;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        label {
+            font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            color: #ccc;
+        }
+
+        input[type="text"], select, button {
+            padding: 8px;
+            font-size: 0.95rem;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        button {
+            background-color: #444;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+            border: 1px solid #666;
+            padding: 10px;
+        }
+
+        button:hover {
+            background-color: #666;
+        }
+
+        /* Preview Area */
+        #preview-area {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+            padding: 20px;
+            background-image: radial-gradient(circle, #444 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* A4 Paper with Texture */
+        #paper {
+            width: 210mm;
+            height: 297mm;
+            background-color: #fcf9f2;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            box-sizing: border-box;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
+            padding: 50mm 40mm;
+            
+            background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.05"/%3E%3C/svg%3E');
+        }
+
+        /* Typography Options */
+        .font-univers {
+            font-family: "Univers", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .font-typewriter {
+            font-family: "Courier New", Courier, monospace;
+            letter-spacing: 0px;
+        }
+
+        /* Score Elements */
+        #score-title {
+            font-size: 16pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 15mm;
+            letter-spacing: 2px;
+            width: 100%;
+            text-align: center;
+        }
+
+        #score-content {
+            font-size: 12pt;
+            line-height: 2.2;
+            white-space: pre-wrap;
+            max-width: 100%;
+            color: #111;
+        }
+
+        /* Signature and Date */
+        #score-footer {
+            font-size: 10pt;
+            margin-top: 25mm;
+            width: 100%;
+            text-align: left;
+            white-space: pre-wrap;
+            color: #222;
+        }
+
+        /* Typewriter/Print Misalignment Effect */
+        .char {
+            display: inline-block;
+        }
+
+        /* Print Styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #paper, #paper * {
+                visibility: visible;
+            }
+            #paper {
+                position: absolute;
+                left: 0;
+                top: 0;
+                box-shadow: none;
+                width: 210mm;
+                height: 297mm;
+                padding: 50mm 40mm;
+            }
+            @page {
+                size: A4;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="ui-panel">
+        <h1>Fluxus Score Generator</h1>
+        
+        <label>
+            Event Name:
+            <input type="text" id="event-input" placeholder="e.g., WATER EVENT" value="WATER EVENT">
+        </label>
+
+        <label>
+            Signature (Author):
+            <input type="text" id="signature-input" placeholder="e.g., G. Brecht" value="">
+        </label>
+
+        <label>
+            Date/Season:
+            <input type="text" id="date-input" placeholder="e.g., Summer, 2026" value="Summer, 2026">
+        </label>
+
+        <label>
+            Typography:
+            <select id="font-select">
+                <option value="font-typewriter">Typewriter (Courier)</option>
+                <option value="font-univers">Univers (Sans-serif)</option>
+            </select>
+        </label>
+
+        <label>
+            List Style:
+            <select id="list-select">
+                <option value="bullet">Bullet Points (●)</option>
+                <option value="number">Numbers (1. 2.)</option>
+                <option value="none">None (Plain Text)</option>
+            </select>
+        </label>
+
+        <button onclick="generateScore()">Generate Score</button>
+        <button onclick="window.print()">Print / Save as PDF</button>
+    </div>
+
+    <div id="preview-area">
+        <div id="paper" class="font-typewriter">
+            <div id="score-title">WATER EVENT</div>
+            <div id="score-content"></div>
+            <div id="score-footer"></div>
+        </div>
+    </div>
+
+    <script>
+        const templates = [
+            // Observational / Time-based
+            ["Observe the {noun} until it disappears."],
+            ["Stare at the {noun} until you can no longer recognize it."],
+            ["Listen to the {noun} for exactly one year."],
+            ["Imagine a {noun} in an empty room.", "Do not open the door."],
+            ["Wait for the {noun} to make a sound.", "Leave immediately."],
+            
+            // Destructive / Transformative
+            ["Take a {noun}.", "Cut it into 1000 pieces.", "Throw them into the wind."],
+            ["Bury the {noun}.", "Dig it up in 10 years."],
+            ["Light a match.", "Watch the {noun} burn.", "Collect the ashes."],
+            ["Melt the {noun}."],
+            ["Paint the {noun} completely black."],
+            ["Boil the {noun}.", "Drink the water."],
+
+            // Relational / Social
+            ["Send a {noun} to a friend.", "Wait for a reply."],
+            ["Exchange your {noun} with a stranger."],
+            ["Give the {noun} to the first person you meet."],
+            ["Tell a secret to the {noun}.", "Forget the secret."],
+
+            // Spatial / Object manipulation
+            ["Place the {noun} under a piano."],
+            ["Draw a line around the {noun}.", "Never cross the line."],
+            ["Put a {noun} inside another {noun}."],
+            ["Keep the {noun} in your pocket for a year."],
+            ["A {noun} is placed on a pedestal.", "Audience leaves."],
+            ["Drop a {noun} from a great height.", "Listen to the impact."],
+            ["Nail a {noun} to the wall."],
+            ["Hide a {noun} in a museum."],
+
+            // Conceptual / Absurd
+            ["Do not think about {noun}."],
+            ["Count every {noun} in the world."],
+            ["Breathe in.", "Become the {noun}.", "Breathe out."],
+            ["Find a {noun}.", "Pretend it is something else."],
+            ["A {noun} that cannot be seen.", "A {noun} that cannot be touched."],
+            ["Make a {noun} out of ice.", "Watch it return to water."],
+            ["Spell the word '{noun}' backwards.", "Repeat until meaningless."]
+        ];
+
+        function applyAnalogDistortion(text, isTypewriter) {
+            let resultHTML = "";
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                if (char === " " || char === "\n") {
+                    resultHTML += char;
+                    continue;
+                }
+
+                const maxShift = isTypewriter ? 0.8 : 0.2; 
+                const maxRotate = isTypewriter ? 2 : 0.5;
+                const minOpacity = isTypewriter ? 0.75 : 0.9;
+
+                const shiftY = (Math.random() * maxShift * 2 - maxShift).toFixed(2);
+                const shiftX = (Math.random() * maxShift - maxShift/2).toFixed(2); 
+                const rotate = (Math.random() * maxRotate * 2 - maxRotate).toFixed(2);
+                const opacity = (Math.random() * (1 - minOpacity) + minOpacity).toFixed(2);
+
+                resultHTML += `<span class="char" style="transform: translate(${shiftX}px, ${shiftY}px) rotate(${rotate}deg); opacity: ${opacity};">${char}</span>`;
+            }
+            return resultHTML;
+        }
+
+        async function generateScore() {
+            const input = document.getElementById('event-input').value.trim();
+            const author = document.getElementById('signature-input').value.trim();
+            const dateStr = document.getElementById('date-input').value.trim();
+            const fontSelect = document.getElementById('font-select').value;
+            const listSelect = document.getElementById('list-select').value;
+            const isTypewriter = fontSelect === 'font-typewriter';
+            
+            // Set Font
+            const paper = document.getElementById('paper');
+            paper.className = fontSelect;
+
+            // Process title
+            let title = input.toUpperCase();
+            if (!title) title = "EVENT";
+            
+            let noun = title.replace(/ EVENT$/i, '').toLowerCase().trim();
+            if (!noun) noun = "it";
+
+            // Show loading state
+            document.getElementById('score-title').innerHTML = title;
+            document.getElementById('score-content').innerHTML = "Generating...";
+            document.getElementById('score-footer').innerHTML = "";
+
+            try {
+                // Call Python backend
+                const response = await fetch('/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ noun: noun })
+                });
+                const data = await response.json();
+                
+                // Process generated text
+                let generatedText = data.text;
+                // Split into steps by lines or sentences if list is requested
+                let steps = generatedText.split('\n').filter(s => s.trim().length > 0);
+                // If it's just one line but has multiple sentences, split by period (optional, but let's keep it simple)
+                if (steps.length === 1 && steps[0].split('. ').length > 1 && listSelect !== 'none') {
+                    steps = steps[0].split('. ').map(s => s.trim() + (s.endsWith('.') ? '' : '.'));
+                }
+
+                let formattedContent = "";
+                steps.forEach((step, index) => {
+                    let processedStep = step.trim();
+                    if (listSelect === "bullet") {
+                        formattedContent += "●  " + processedStep + "\n";
+                    } else if (listSelect === "number") {
+                        formattedContent += (index + 1) + ". " + processedStep + "\n";
+                    } else {
+                        formattedContent += processedStep + "\n";
+                    }
+                });
+
+                // Process footer
+                let footerText = "";
+                if (author && dateStr) {
+                    footerText = author + "\n" + dateStr;
+                } else if (author) {
+                    footerText = author;
+                } else if (dateStr) {
+                    footerText = dateStr;
+                }
+
+                // Apply analog typewriter distortion
+                document.getElementById('score-title').innerHTML = applyAnalogDistortion(title, isTypewriter);
+                document.getElementById('score-content').innerHTML = applyAnalogDistortion(formattedContent, isTypewriter);
+                document.getElementById('score-footer').innerHTML = applyAnalogDistortion(footerText, isTypewriter);
+            } catch (err) {
+                document.getElementById('score-content').innerHTML = "Error connecting to server.";
+                console.error(err);
+            }
+        }
+
+        // Initialize events
+        document.getElementById('font-select').addEventListener('change', function() {
+            document.getElementById('paper').className = this.value;
+            generateScore();
+        });
+        document.getElementById('list-select').addEventListener('change', generateScore);
+
+        // Generate initial score
+        generateScore();
+    </script>
+</body>
+</html>
