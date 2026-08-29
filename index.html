@@ -145,6 +145,39 @@
             display: inline-block;
         }
 
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                height: auto;
+            }
+            #ui-panel {
+                width: 100%;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+                z-index: 10;
+            }
+            #preview-area {
+                padding: 15px;
+            }
+            /* Scale paper down to fit mobile screen, preserving A4 ratio */
+            #paper {
+                width: 90vw;
+                height: calc(90vw * 1.414);
+                padding: 15vw 10vw;
+            }
+            #score-title {
+                font-size: 6vw;
+                margin-bottom: 8vw;
+            }
+            #score-content {
+                font-size: 4.5vw;
+            }
+            #score-footer {
+                font-size: 3.5vw;
+                margin-top: 10vw;
+            }
+        }
+
         /* Print Styles */
         @media print {
             body * {
