@@ -245,6 +245,7 @@
         </label>
 
         <button onclick="generateScore()">Generate Score</button>
+        <button id="download-btn" onclick="downloadJPG()" disabled>Download as JPG</button>
         <button onclick="window.print()">Print / Save as PDF</button>
         
         <div style="font-size: 0.8rem; color: #aaa; margin-top: 10px;">
@@ -263,6 +264,21 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
+        function downloadJPG() {
+            const img = document.getElementById('rendered-image');
+            if (!img.src || img.src === "") return;
+            
+            const titleInput = document.getElementById('event-input').value.trim();
+            let fileName = titleInput ? titleInput.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase() : "event";
+            
+            const a = document.createElement('a');
+            a.href = img.src;
+            a.download = `fluxus_${fileName}.jpg`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
         const templates = [
             // Observational / Time-based
             ["Observe the {noun} until it disappears."],
@@ -373,6 +389,8 @@
         }
 
         function generateScore() {
+            document.getElementById('download-btn').disabled = true;
+            
             const input = document.getElementById('event-input').value.trim();
             const author = document.getElementById('signature-input').value.trim();
             const dateStr = document.getElementById('date-input').value.trim();
@@ -438,6 +456,7 @@
                     renderedImage.src = canvas.toDataURL("image/jpeg", 0.9);
                     paper.style.display = 'none';
                     renderedImage.style.display = 'block';
+                    document.getElementById('download-btn').disabled = false;
                 });
             }, 300);
         }
