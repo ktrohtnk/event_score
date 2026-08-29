@@ -502,7 +502,8 @@
             let title = input.toUpperCase();
             if (!title) title = "EVENT";
             
-            let noun = title.replace(/ EVENT$/i, '').toLowerCase().trim();
+            // Extract the noun, preserving the original casing typed by the user
+            let noun = input.replace(/ EVENT$/i, '').trim();
             if (!noun) noun = "it";
 
             // Process steps from random template
@@ -510,7 +511,10 @@
             let formattedContent = "";
             randomSteps.forEach((step, index) => {
                 let processedStep = step.replace(/{noun}/g, noun);
-                processedStep = processedStep.charAt(0).toUpperCase() + processedStep.slice(1);
+                // Capitalize the first letter of the sentence (unless it's empty)
+                if (processedStep.length > 0) {
+                    processedStep = processedStep.charAt(0).toUpperCase() + processedStep.slice(1);
+                }
 
                 if (listSelect === "bullet") {
                     formattedContent += "●  " + processedStep + "\n";
