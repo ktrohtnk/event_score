@@ -15,58 +15,90 @@
             height: 100vh;
         }
 
-        /* UI Panel */
+        /* UI Panel (Retro Typewriter / Form Aesthetic) */
         #ui-panel {
-            width: 320px;
-            background-color: #1a1a1a;
-            color: #fff;
-            padding: 20px;
+            width: 340px;
+            background-color: #d1cec7; /* Cardboard / retro beige */
+            color: #111;
+            padding: 30px 20px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+            gap: 15px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
             z-index: 10;
             overflow-y: auto;
+            font-family: "Courier New", Courier, monospace;
+            border-right: 2px dashed #999;
         }
 
         #ui-panel h1 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-top: 0;
-            border-bottom: 1px solid #444;
-            padding-bottom: 10px;
-            font-weight: 400;
+            border-bottom: 2px dashed #111;
+            padding-bottom: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
             letter-spacing: 1px;
+            text-align: center;
         }
 
-        label {
-            font-size: 0.85rem;
+        #ui-panel label {
+            font-size: 0.9rem;
             display: flex;
             flex-direction: column;
-            gap: 4px;
-            color: #ccc;
+            gap: 5px;
+            color: #111;
+            font-weight: bold;
         }
 
-        input[type="text"], select, button {
-            padding: 8px;
+        #ui-panel input[type="text"], #ui-panel select {
+            font-family: "Courier New", Courier, monospace;
+            padding: 8px 5px;
             font-size: 0.95rem;
-            border: 1px solid #555;
-            border-radius: 4px;
-            background-color: #333;
-            color: #fff;
+            border: none;
+            border-bottom: 1px dashed #111;
+            background-color: transparent;
+            color: #111;
+            outline: none;
+        }
+        
+        #ui-panel input[type="text"]:focus, #ui-panel select:focus {
+            border-bottom: 2px solid #111;
         }
 
-        button {
-            background-color: #444;
+        #ui-panel button {
+            font-family: "Courier New", Courier, monospace;
+            background-color: #111;
+            color: #d1cec7;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
             margin-top: 10px;
-            border: 1px solid #666;
-            padding: 10px;
+            border: 2px solid #111;
+            padding: 12px;
+            text-transform: uppercase;
+            font-weight: bold;
         }
 
-        button:hover {
-            background-color: #666;
+        #ui-panel button:hover {
+            background-color: transparent;
+            color: #111;
+        }
+        
+        #ui-panel button:disabled {
+            background-color: #888;
+            border-color: #888;
+            color: #555;
+            cursor: not-allowed;
+        }
+
+        #ui-panel .tip-text {
+            font-size: 0.8rem;
+            color: #555;
+            margin-top: 10px;
+            border-top: 1px dashed #999;
+            padding-top: 10px;
+            text-align: center;
         }
 
         /* Preview Area */
@@ -251,8 +283,8 @@
         <button id="download-btn" onclick="downloadJPG()" disabled>Download as JPG</button>
         <button onclick="window.print()">Print / Save as PDF</button>
         
-        <div style="font-size: 0.8rem; color: #aaa; margin-top: 10px;">
-            💡 On mobile, long-press the paper to save it as an image.
+        <div class="tip-text">
+            * On mobile, long-press the paper to save it as an image.
         </div>
     </div>
 
