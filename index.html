@@ -112,10 +112,10 @@
 
         /* Score Elements */
         #score-title {
-            font-size: 26pt;
-            font-weight: bold;
+            font-size: 20pt;
+            font-weight: normal;
             text-transform: uppercase;
-            margin-bottom: 20mm;
+            margin-bottom: 25mm;
             letter-spacing: 2px;
             width: 100%;
             text-align: center;
@@ -128,6 +128,9 @@
             white-space: pre-wrap;
             max-width: 100%;
             color: #111;
+            width: fit-content;
+            margin: 0 auto;
+            text-align: left;
         }
 
         /* Signature and Date */
@@ -472,7 +475,7 @@
 
                         let extraStyle = "";
                         if (char === '●') {
-                            extraStyle = "font-size: 1.6em; vertical-align: baseline;";
+                            extraStyle = "font-size: 1.2em; vertical-align: middle; margin-right: 5px;";
                         }
 
                         resultHTML += `<span class="char" style="transform: translate(${shiftX}px, ${shiftY}px) rotate(${rotate}deg); opacity: ${opacity}; ${extraStyle}">${char}</span>`;
