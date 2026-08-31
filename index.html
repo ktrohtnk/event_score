@@ -470,7 +470,12 @@
                         const rotate = (Math.random() * maxRotate * 2 - maxRotate).toFixed(2);
                         const opacity = (Math.random() * (1 - minOpacity) + minOpacity).toFixed(2);
 
-                        resultHTML += `<span class="char" style="transform: translate(${shiftX}px, ${shiftY}px) rotate(${rotate}deg); opacity: ${opacity};">${char}</span>`;
+                        let extraStyle = "";
+                        if (char === '●') {
+                            extraStyle = "font-size: 1.6em; vertical-align: baseline;";
+                        }
+
+                        resultHTML += `<span class="char" style="transform: translate(${shiftX}px, ${shiftY}px) rotate(${rotate}deg); opacity: ${opacity}; ${extraStyle}">${char}</span>`;
                     }
                     resultHTML += `</span>`;
                 }
