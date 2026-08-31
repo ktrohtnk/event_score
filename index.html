@@ -35,12 +35,19 @@
         #ui-panel h1 {
             font-size: 1.1rem;
             margin-top: 0;
-            border-bottom: 2px dashed #111;
-            padding-bottom: 15px;
+            margin-bottom: 0;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1px;
             text-align: center;
+        }
+
+        .ascii-line {
+            text-align: center;
+            overflow: hidden;
+            white-space: nowrap;
+            color: #555;
+            margin: 0;
         }
 
         #ui-panel label {
@@ -69,26 +76,54 @@
 
         #ui-panel button {
             font-family: "Courier New", Courier, monospace;
-            background-color: #111;
-            color: #d1cec7;
             cursor: pointer;
-            transition: all 0.2s;
-            margin-top: 10px;
-            border: 2px solid #111;
-            padding: 12px;
+            transition: all 0.1s;
             text-transform: uppercase;
             font-weight: bold;
         }
 
-        #ui-panel button:hover {
-            background-color: transparent;
-            color: #111;
+        #generate-btn {
+            background-color: #111;
+            color: #d1cec7;
+            margin-top: 10px;
+            border: 2px solid #111;
+            padding: 15px;
+            font-size: 1.1rem;
+            box-shadow: 4px 4px 0px #111;
+        }
+
+        #generate-btn:hover {
+            background-color: #333;
         }
         
-        #ui-panel button:disabled {
-            background-color: #888;
-            border-color: #888;
-            color: #555;
+        #generate-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: none;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .action-buttons button {
+            flex: 1;
+            background-color: transparent;
+            color: #111;
+            border: 1px dashed #111;
+            padding: 10px;
+            font-size: 0.85rem;
+        }
+
+        .action-buttons button:hover:not(:disabled) {
+            background-color: #111;
+            color: #d1cec7;
+        }
+        
+        .action-buttons button:disabled {
+            border-color: #aaa;
+            color: #aaa;
             cursor: not-allowed;
         }
 
@@ -96,8 +131,6 @@
             font-size: 0.8rem;
             color: #555;
             margin-top: 10px;
-            border-top: 1px dashed #999;
-            padding-top: 10px;
             text-align: center;
         }
 
@@ -245,25 +278,29 @@
 <body>
 
     <div id="ui-panel">
-        <h1>Fluxus Score Generator</h1>
+        <div class="ascii-line">==================================</div>
+        <h1>Fluxus Generator</h1>
+        <div class="ascii-line">==================================</div>
         
         <label>
-            Event Name:
-            <input type="text" id="event-input" placeholder="e.g., WATER EVENT" value="WATER EVENT">
+            > Event Name:
+            <input type="text" id="event-input" placeholder="e.g. WATER EVENT" value="WATER EVENT">
         </label>
 
         <label>
-            Signature (Author):
-            <input type="text" id="signature-input" placeholder="e.g., G. Brecht" value="">
+            > Signature (Author):
+            <input type="text" id="signature-input" placeholder="e.g. G. Brecht" value="">
         </label>
 
         <label>
-            Date/Season:
-            <input type="text" id="date-input" placeholder="e.g., Summer, 2026" value="Summer, 2026">
+            > Date/Season:
+            <input type="text" id="date-input" placeholder="e.g. Summer, 2026" value="Summer, 2026">
         </label>
 
+        <div class="ascii-line">----------------------------------</div>
+
         <label>
-            Typography:
+            > Typography:
             <select id="font-select">
                 <option value="font-typewriter">Typewriter (Courier)</option>
                 <option value="font-univers">Univers (Sans-serif)</option>
@@ -271,7 +308,7 @@
         </label>
 
         <label>
-            List Style:
+            > List Style:
             <select id="list-select">
                 <option value="bullet">Bullet Points (●)</option>
                 <option value="number">Numbers (1. 2.)</option>
@@ -279,12 +316,17 @@
             </select>
         </label>
 
-        <button onclick="generateScore()">Generate Score</button>
-        <button id="download-btn" onclick="downloadJPG()" disabled>Download as JPG</button>
-        <button onclick="window.print()">Print / Save as PDF</button>
+        <div class="ascii-line">==================================</div>
+
+        <button id="generate-btn" onclick="generateScore()">[ GENERATE SCORE ]</button>
+        
+        <div class="action-buttons">
+            <button id="download-btn" onclick="downloadJPG()" disabled>SAVE JPG</button>
+            <button onclick="window.print()">PRINT / PDF</button>
+        </div>
         
         <div class="tip-text">
-            * On mobile, long-press the paper to save it as an image.
+            * On mobile, long-press<br>the paper to save image.
         </div>
     </div>
 
