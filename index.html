@@ -157,11 +157,18 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: flex-start;
-            text-align: left;
+            align-items: center;
             padding: 40mm 20mm;
             
             background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.05"/%3E%3C/svg%3E');
+        }
+
+        #score-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: fit-content;
+            max-width: 100%;
         }
 
         /* Typography Options */
@@ -182,8 +189,7 @@
             text-transform: uppercase;
             margin-bottom: 25mm;
             letter-spacing: 2px;
-            width: 100%;
-            text-align: center;
+            text-align: left;
             white-space: pre-wrap;
         }
 
@@ -193,9 +199,8 @@
             white-space: pre-wrap;
             max-width: 100%;
             color: #111;
-            width: fit-content;
-            margin: 0 auto;
             text-align: left;
+            padding-left: 2em;
         }
 
         .score-line {
@@ -218,7 +223,6 @@
         #score-footer {
             font-size: 14pt;
             margin-top: 30mm;
-            width: 100%;
             text-align: left;
             white-space: pre-wrap;
             color: #222;
@@ -256,6 +260,7 @@
             }
             #score-content {
                 font-size: 4.5vw;
+                padding-left: 8vw;
             }
             #score-footer {
                 font-size: 3.5vw;
@@ -348,9 +353,11 @@
 
     <div id="preview-area">
         <div id="paper" class="font-typewriter">
-            <div id="score-title">WATER EVENT</div>
-            <div id="score-content"></div>
-            <div id="score-footer"></div>
+            <div id="score-container">
+                <div id="score-title">WATER EVENT</div>
+                <div id="score-content"></div>
+                <div id="score-footer"></div>
+            </div>
         </div>
         <img id="rendered-image" style="display: none; width: 210mm; height: 297mm; box-shadow: 0 5px 15px rgba(0,0,0,0.5); object-fit: contain;">
     </div>
