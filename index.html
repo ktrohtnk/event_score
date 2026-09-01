@@ -159,7 +159,7 @@
             justify-content: center;
             align-items: flex-start;
             text-align: left;
-            padding: 50mm 40mm;
+            padding: 40mm 20mm;
             
             background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.05"/%3E%3C/svg%3E');
         }
@@ -198,6 +198,22 @@
             text-align: left;
         }
 
+        .score-line {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0.2em;
+        }
+        
+        .bullet-mark, .number-mark {
+            flex-shrink: 0;
+            margin-right: 15px;
+        }
+        
+        .bullet-mark {
+            font-size: 1.2em;
+            transform: translateY(-2px);
+        }
+
         /* Signature and Date */
         #score-footer {
             font-size: 14pt;
@@ -231,7 +247,7 @@
             #paper, #rendered-image {
                 width: 90vw !important;
                 height: calc(90vw * 1.414) !important;
-                padding: 15vw 10vw !important;
+                padding: 15vw 6vw !important;
                 box-sizing: border-box;
             }
             #score-title {
@@ -547,12 +563,7 @@
                         const rotate = (Math.random() * maxRotate * 2 - maxRotate).toFixed(2);
                         const opacity = (Math.random() * (1 - minOpacity) + minOpacity).toFixed(2);
 
-                        let extraStyle = "";
-                        if (char === '●') {
-                            extraStyle = "font-size: 1.2em; vertical-align: middle; margin-right: 5px;";
-                        }
-
-                        resultHTML += `<span class="char" style="transform: translate(${shiftX}px, ${shiftY}px) rotate(${rotate}deg); opacity: ${opacity}; ${extraStyle}">${char}</span>`;
+                        resultHTML += `<span class="char" style="transform: translate(${shiftX}px, ${shiftY}px) rotate(${rotate}deg); opacity: ${opacity};">${char}</span>`;
                     }
                     resultHTML += `</span>`;
                 }
@@ -586,11 +597,14 @@
             
             // Extract the noun, preserving the original casing typed by the user
             let noun = input.replace(/ EVENT$/i, '').trim();
-            if (!noun) noun = "it";
-
+            if (!noun) noun = "it";            
+            
             // Process steps from random template
             const randomSteps = templates[Math.floor(Math.random() * templates.length)];
-            let formattedContent = "";
+            
+            const contentDiv = document.getElementById('score-content');
+            contentDiv.innerHTML = ""; // Clear existing content
+
             randomSteps.forEach((step, index) => {
                 let processedStep = step.replace(/{noun}/g, noun);
                 // Capitalize the first letter of the sentence (unless it's empty)
@@ -598,13 +612,36 @@
                     processedStep = processedStep.charAt(0).toUpperCase() + processedStep.slice(1);
                 }
 
+                const lineDiv = document.createElement('div');
+                lineDiv.className = 'score-line';
+
                 if (listSelect === "bullet") {
-                    formattedContent += "●  " + processedStep + "\n";
+                    const markSpan = document.createElement('span');
+                    markSpan.className = 'bullet-mark';
+                    markSpan.innerHTML = applyAnalogDistortion("●", isTypewriter);
+                    
+                    const textSpan = document.createElement('span');
+                    textSpan.className = 'line-text';
+                    textSpan.innerHTML = applyAnalogDistortion(processedStep, isTypewriter);
+                    
+                    lineDiv.appendChild(markSpan);
+                    lineDiv.appendChild(textSpan);
                 } else if (listSelect === "number") {
-                    formattedContent += (index + 1) + ". " + processedStep + "\n";
+                    const markSpan = document.createElement('span');
+                    markSpan.className = 'number-mark';
+                    markSpan.innerHTML = applyAnalogDistortion((index + 1) + ".", isTypewriter);
+                    
+                    const textSpan = document.createElement('span');
+                    textSpan.className = 'line-text';
+                    textSpan.innerHTML = applyAnalogDistortion(processedStep, isTypewriter);
+                    
+                    lineDiv.appendChild(markSpan);
+                    lineDiv.appendChild(textSpan);
                 } else {
-                    formattedContent += processedStep + "\n";
+                    lineDiv.innerHTML = applyAnalogDistortion(processedStep, isTypewriter);
                 }
+                
+                contentDiv.appendChild(lineDiv);
             });
 
             // Process footer (Signature and Date)
@@ -619,7 +656,6 @@
 
             // Apply analog typewriter distortion
             document.getElementById('score-title').innerHTML = applyAnalogDistortion(title, isTypewriter);
-            document.getElementById('score-content').innerHTML = applyAnalogDistortion(formattedContent, isTypewriter);
             document.getElementById('score-footer').innerHTML = applyAnalogDistortion(footerText, isTypewriter);
 
             // Give the browser a moment to render the text and fonts, then convert to image
