@@ -336,7 +336,12 @@
 
     <div id="ui-panel">
         <div class="ascii-line">==================================</div>
-        <h1>Event Score Generator</h1>
+        <div id="animated-logo-container" style="text-align: center; margin: 15px 0;">
+            <canvas id="logo-canvas" width="200" height="90" style="display: block; margin: 0 auto;"></canvas>
+            <div style="font-family: sans-serif; font-size: 0.65rem; letter-spacing: 1px; margin-top: 5px; color: #111;">
+                EVENT SCORE GENERATOR
+            </div>
+        </div>
         <div class="ascii-line">==================================</div>
         
         <label>
@@ -556,7 +561,83 @@
             }, 300);
         }
 
+
+        // --- Animated Title Logo ---
+        const logoCanvas = document.getElementById('logo-canvas');
+        const lctx = logoCanvas.getContext('2d', { willReadFrequently: true });
+        const fluxFonts = ['Arial', 'Times New Roman', 'Courier New', 'Georgia', 'Impact', 'Verdana', 'Trebuchet MS'];
+        
+        function drawLogoFrame() {
+            lctx.clearRect(0, 0, logoCanvas.width, logoCanvas.height);
+            lctx.fillStyle = '#111';
+            lctx.textAlign = 'center';
+            lctx.textBaseline = 'middle';
+            
+            const lines = ["CLick", "YAM"];
+            const startY = 25;
+            const lineHeight = 40;
+            
+            lines.forEach((line, lineIdx) => {
+                const y = startY + lineIdx * lineHeight;
+                const charWidth = 26;
+                const totalWidth = line.length * charWidth;
+                let startX = (logoCanvas.width - totalWidth) / 2 + (charWidth / 2);
+                
+                for (let i = 0; i < line.length; i++) {
+                    const char = line[i];
+                    const font = fluxFonts[Math.floor(Math.random() * fluxFonts.length)];
+                    const weight = Math.random() > 0.5 ? 'bold ' : '';
+                    lctx.font = `${weight}34px ${font}`;
+                    
+                    const x = startX + i * charWidth;
+                    
+                    lctx.save();
+                    lctx.translate(x, y);
+                    
+                    // Specific flip for lowercase 'c'
+                    if (char === 'c') {
+                        lctx.scale(-1, 1);
+                    }
+                    
+                    // Base jitter per character
+                    if (Math.random() < 0.4) {
+                        lctx.translate((Math.random()-0.5)*4, (Math.random()-0.5)*4);
+                        lctx.globalAlpha = Math.random() * 0.4 + 0.6;
+                    }
+                    
+                    lctx.fillText(char, 0, 0);
+                    lctx.restore();
+                }
+            });
+            
+            // Glitch Noise 100 (Pixel mosaic block displacement)
+            if (Math.random() < 0.8) {
+                const imgData = lctx.getImageData(0, 0, logoCanvas.width, logoCanvas.height);
+                const data = imgData.data;
+                const pSize = 4; // Block size for glitch
+                
+                for (let y = 0; y < logoCanvas.height; y += pSize) {
+                    for (let x = 0; x < logoCanvas.width; x += pSize) {
+                        if (Math.random() < 0.15) { // Probability of block glitch
+                            const i = (y * logoCanvas.width + x) * 4;
+                            const a = data[i+3];
+                            if (a > 50) {
+                                lctx.clearRect(x, y, pSize, pSize);
+                                lctx.fillStyle = `rgba(17,17,17,${(a/255)*0.7})`;
+                                // Displace the block horizontally
+                                lctx.fillRect(x + (Math.random() > 0.5 ? 8 : -8), y, pSize, pSize);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        setInterval(drawLogoFrame, 120);
+        // ---------------------------
+
         // Initialize events
+
         document.getElementById('font-select').addEventListener('change', function() {
             document.getElementById('paper').className = this.value;
             generateScore();
