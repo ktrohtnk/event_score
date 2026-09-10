@@ -596,12 +596,11 @@
             lctx.textAlign = 'center';
             lctx.textBaseline = 'middle';
             
-            // Line 1: CLick (Custom Pair Kerning)
+            // Line 1: CLick (Massive)
             const line1 = "CLick";
-            const font1 = 110;
-            const y1 = 60;
-            // 'i' is very thin, so custom X positions look much better than fixed width
-            const xPos1 = [45, 105, 145, 195, 255];
+            const font1 = 160;
+            const y1 = 70; // Moved up
+            const xPos1 = [30, 110, 160, 220, 290];
             
             for (let i = 0; i < line1.length; i++) {
                 const char = line1[i];
@@ -623,16 +622,14 @@
                 lctx.restore();
             }
 
-            // Line 2: YAM (Custom Pair Kerning)
+            // Line 2: YAM (Massive)
             const line2 = "YAM";
-            const font2 = 115;
-            const y2 = 155;
-            
-            // Y and A have diagonal strokes, so they need to be squeezed tighter than A and M.
+            const font2 = 180;
+            const y2 = 180; // Tightly packed
             const xPositions = [
-                60,   // Y center
-                140,  // A center
-                240   // M center
+                30,   // Y center
+                150,  // A center
+                280   // M center
             ];
             
             for (let i = 0; i < line2.length; i++) {
