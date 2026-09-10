@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Score Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Abril+Fatface&family=Bebas+Neue&family=Bungee+Shade&family=Creepster&family=Inter:wght@400;900&family=Monoton&family=Montserrat:wght@900&family=Permanent+Marker&family=Press+Start+2P&family=Righteous&family=Rubik+Pixels&family=Silkscreen&family=Space+Mono:wght@700&family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Barlow+Condensed:wght@900&family=Boogaloo&family=Bungee+Shade&family=Creepster&family=Ewert&family=Finger+Paint&family=Fjalla+One&family=Fredoka+One&family=Lilita+One&family=Lobster&family=Luckiest+Guy&family=Metal+Mania&family=Nosifer&family=Oswald:wght@700&family=Paytone+One&family=Permanent+Marker&family=Playfair+Display&family=Rock+Salt&family=Rye&family=Sancreek&family=Six+Caps&family=Ultra&family=Vast+Shadow&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Pixelify+Sans&family=Black+Ops+One&family=Bungee&family=Rubik+Glitch&family=Nabla&family=Pacifico&family=Dancing+Script:wght@700&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
         /* Base styling */
         body {
@@ -336,9 +340,9 @@
 
     <div id="ui-panel">
         <div class="ascii-line">==================================</div>
-        <div id="animated-logo-container" style="text-align: center; margin: 15px 0;">
-            <canvas id="logo-canvas" width="200" height="90" style="display: block; margin: 0 auto;"></canvas>
-            <div style="font-family: sans-serif; font-size: 0.65rem; letter-spacing: 1px; margin-top: 5px; color: #111;">
+        <div id="animated-logo-container" style="text-align: center; margin: 20px 0;">
+            <canvas id="logo-canvas" width="260" height="130" style="display: block; margin: 0 auto;"></canvas>
+            <div style="font-family: sans-serif; font-size: 0.75rem; letter-spacing: 1px; margin-top: 5px; color: #111; font-weight: 900;">
                 EVENT SCORE GENERATOR
             </div>
         </div>
@@ -565,7 +569,28 @@
         // --- Animated Title Logo ---
         const logoCanvas = document.getElementById('logo-canvas');
         const lctx = logoCanvas.getContext('2d', { willReadFrequently: true });
-        const fluxFonts = ['Arial', 'Times New Roman', 'Courier New', 'Georgia', 'Impact', 'Verdana', 'Trebuchet MS'];
+        
+        const fluxFonts = [
+            '400 "Fredoka One", cursive',
+            '400 "Paytone One", sans-serif',
+            '400 "Lilita One", cursive',
+            '400 "Luckiest Guy", cursive',
+            '700 "Oswald", sans-serif',
+            '900 "Barlow Condensed", sans-serif',
+            '400 "Fjalla One", sans-serif',
+            '400 "Six Caps", sans-serif',
+            '400 "Permanent Marker", cursive',
+            '400 "Finger Paint", cursive',
+            '400 "Rock Salt", cursive',
+            '400 "Lobster", cursive',
+            '400 "Boogaloo", cursive',
+            '400 "Playfair Display", serif',
+            '400 "Ultra", serif',
+            '400 "Alfa Slab One", cursive',
+            '400 "Rye", cursive',
+            '400 "Ewert", cursive',
+            '400 "Sancreek", cursive'
+        ];
         
         function drawLogoFrame() {
             lctx.clearRect(0, 0, logoCanvas.width, logoCanvas.height);
@@ -574,34 +599,40 @@
             lctx.textBaseline = 'middle';
             
             const lines = ["CLick", "YAM"];
-            const startY = 25;
-            const lineHeight = 40;
+            
+            // Size and spacing
+            const fontSize = 54;
+            const lineHeight = fontSize * 0.8; // line height 0.8
+            const startY = 35;
             
             lines.forEach((line, lineIdx) => {
                 const y = startY + lineIdx * lineHeight;
-                const charWidth = 26;
+                const charWidth = 28; // Simulating kerning -11 for 54px font (very tight)
                 const totalWidth = line.length * charWidth;
                 let startX = (logoCanvas.width - totalWidth) / 2 + (charWidth / 2);
                 
                 for (let i = 0; i < line.length; i++) {
                     const char = line[i];
                     const font = fluxFonts[Math.floor(Math.random() * fluxFonts.length)];
-                    const weight = Math.random() > 0.5 ? 'bold ' : '';
-                    lctx.font = `${weight}34px ${font}`;
+                    lctx.font = `${fontSize}px ${font.split(' "')[1].split('",')[0]}`; // Extract just the font family name
+                    // Actually, the array strings are like '400 "Oswald", sans-serif'.
+                    // Can just assign directly to lctx.font if we prepend the font size properly:
+                    // lctx.font = 'normal ' + fontSize + 'px ' + font.substring(font.indexOf('"'));
+                    const weight = font.split(' ')[0];
+                    const fontName = font.substring(font.indexOf('"'));
+                    lctx.font = `${weight} ${fontSize}px ${fontName}`;
                     
                     const x = startX + i * charWidth;
                     
                     lctx.save();
                     lctx.translate(x, y);
                     
-                    // Specific flip for lowercase 'c'
                     if (char === 'c') {
                         lctx.scale(-1, 1);
                     }
                     
-                    // Base jitter per character
                     if (Math.random() < 0.4) {
-                        lctx.translate((Math.random()-0.5)*4, (Math.random()-0.5)*4);
+                        lctx.translate((Math.random()-0.5)*5, (Math.random()-0.5)*5);
                         lctx.globalAlpha = Math.random() * 0.4 + 0.6;
                     }
                     
@@ -610,22 +641,21 @@
                 }
             });
             
-            // Glitch Noise 100 (Pixel mosaic block displacement)
+            // Glitch Noise 100
             if (Math.random() < 0.8) {
                 const imgData = lctx.getImageData(0, 0, logoCanvas.width, logoCanvas.height);
                 const data = imgData.data;
-                const pSize = 4; // Block size for glitch
+                const pSize = 5; 
                 
                 for (let y = 0; y < logoCanvas.height; y += pSize) {
                     for (let x = 0; x < logoCanvas.width; x += pSize) {
-                        if (Math.random() < 0.15) { // Probability of block glitch
+                        if (Math.random() < 0.15) {
                             const i = (y * logoCanvas.width + x) * 4;
                             const a = data[i+3];
                             if (a > 50) {
                                 lctx.clearRect(x, y, pSize, pSize);
                                 lctx.fillStyle = `rgba(17,17,17,${(a/255)*0.7})`;
-                                // Displace the block horizontally
-                                lctx.fillRect(x + (Math.random() > 0.5 ? 8 : -8), y, pSize, pSize);
+                                lctx.fillRect(x + (Math.random() > 0.5 ? 10 : -10), y, pSize, pSize);
                             }
                         }
                     }
@@ -633,7 +663,9 @@
             }
         }
         
-        setInterval(drawLogoFrame, 120);
+        // Ensure fonts load before drawing first frame properly
+        setTimeout(drawLogoFrame, 500);
+        setInterval(drawLogoFrame, 200); // 5 fps (1000 / 5 = 200)
         // ---------------------------
 
         // Initialize events
