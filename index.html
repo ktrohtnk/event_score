@@ -339,7 +339,7 @@
     <div id="ui-panel">
         <div class="ascii-line">==================================</div>
         <div id="animated-logo-container" style="text-align: center; margin: 20px 0;">
-            <canvas id="logo-canvas" width="260" height="130" style="display: block; margin: 0 auto;"></canvas>
+            <canvas id="logo-canvas" width="300" height="180" style="display: block; margin: 0 auto;"></canvas>
             <div style="font-family: sans-serif; font-size: 0.75rem; letter-spacing: 1px; margin-top: 5px; color: #111; font-weight: 900;">
                 EVENT SCORE GENERATOR
             </div>
@@ -596,74 +596,62 @@
             lctx.textAlign = 'center';
             lctx.textBaseline = 'middle';
             
-            const lines = ["CLick", "YAM"];
+            // Line 1: CLick
+            const line1 = "CLick";
+            const font1 = 110;
+            const width1 = 56; // kerning for 5 letters to fit 300px
+            const y1 = 55;
+            let startX1 = (logoCanvas.width - (line1.length * width1)) / 2 + (width1 / 2);
             
-            // Size and spacing
-            const fontSize = 54;
-            const lineHeight = fontSize * 0.8; // line height 0.8
-            const startY = 35;
-            
-            lines.forEach((line, lineIdx) => {
-                const y = startY + lineIdx * lineHeight;
-                const charWidth = 28; // Simulating kerning -11 for 54px font (very tight)
-                const totalWidth = line.length * charWidth;
-                let startX = (logoCanvas.width - totalWidth) / 2 + (charWidth / 2);
+            for (let i = 0; i < line1.length; i++) {
+                const char = line1[i];
+                const font = fluxFonts[Math.floor(Math.random() * fluxFonts.length)];
+                const weight = font.split(' ')[0];
+                const fontName = font.substring(font.indexOf('"'));
+                lctx.font = `${weight} ${font1}px ${fontName}`;
                 
-                for (let i = 0; i < line.length; i++) {
-                    const char = line[i];
-                    const font = fluxFonts[Math.floor(Math.random() * fluxFonts.length)];
-                    lctx.font = `${fontSize}px ${font.split(' "')[1].split('",')[0]}`; // Extract just the font family name
-                    // Actually, the array strings are like '400 "Oswald", sans-serif'.
-                    // Can just assign directly to lctx.font if we prepend the font size properly:
-                    // lctx.font = 'normal ' + fontSize + 'px ' + font.substring(font.indexOf('"'));
-                    const weight = font.split(' ')[0];
-                    const fontName = font.substring(font.indexOf('"'));
-                    lctx.font = `${weight} ${fontSize}px ${fontName}`;
-                    
-                    const x = startX + i * charWidth;
-                    
-                    lctx.save();
-                    lctx.translate(x, y);
-                    
-                    if (char === 'c') {
-                        lctx.scale(-1, 1);
-                    }
-                    
-                    if (Math.random() < 0.4) {
-                        lctx.translate((Math.random()-0.5)*5, (Math.random()-0.5)*5);
-                        lctx.globalAlpha = Math.random() * 0.4 + 0.6;
-                    }
-                    
-                    lctx.fillText(char, 0, 0);
-                    lctx.restore();
-                }
-            });
-            
-            // Glitch Noise 100
-            if (Math.random() < 0.8) {
-                const imgData = lctx.getImageData(0, 0, logoCanvas.width, logoCanvas.height);
-                const data = imgData.data;
-                const pSize = 5; 
+                lctx.save();
+                lctx.translate(startX1 + i * width1, y1);
                 
-                for (let y = 0; y < logoCanvas.height; y += pSize) {
-                    for (let x = 0; x < logoCanvas.width; x += pSize) {
-                        if (Math.random() < 0.15) {
-                            const i = (y * logoCanvas.width + x) * 4;
-                            const a = data[i+3];
-                            if (a > 50) {
-                                lctx.clearRect(x, y, pSize, pSize);
-                                lctx.fillStyle = `rgba(17,17,17,${(a/255)*0.7})`;
-                                lctx.fillRect(x + (Math.random() > 0.5 ? 10 : -10), y, pSize, pSize);
-                            }
-                        }
-                    }
+                if (char === 'c') { lctx.scale(-1, 1); }
+                
+                // Sharp jitter (No opacity drop, no blur)
+                if (Math.random() < 0.4) {
+                    lctx.translate((Math.random()-0.5)*6, (Math.random()-0.5)*6);
                 }
+                lctx.fillText(char, 0, 0);
+                lctx.restore();
+            }
+
+            // Line 2: YAM
+            const line2 = "YAM";
+            const font2 = 125;
+            const width2 = 95; // kerning for 3 letters to fit 300px
+            const y2 = 135; // tightly packed under Line 1 (approx 0.7 line height)
+            let startX2 = (logoCanvas.width - (line2.length * width2)) / 2 + (width2 / 2);
+            
+            for (let i = 0; i < line2.length; i++) {
+                const char = line2[i];
+                const font = fluxFonts[Math.floor(Math.random() * fluxFonts.length)];
+                const weight = font.split(' ')[0];
+                const fontName = font.substring(font.indexOf('"'));
+                lctx.font = `${weight} ${font2}px ${fontName}`;
+                
+                lctx.save();
+                lctx.translate(startX2 + i * width2, y2);
+                
+                // Sharp jitter
+                if (Math.random() < 0.4) {
+                    lctx.translate((Math.random()-0.5)*6, (Math.random()-0.5)*6);
+                }
+                lctx.fillText(char, 0, 0);
+                lctx.restore();
             }
         }
         
         // Ensure fonts load before drawing first frame properly
         setTimeout(drawLogoFrame, 500);
-        setInterval(drawLogoFrame, 200); // 5 fps (1000 / 5 = 200)
+        setInterval(drawLogoFrame, 200); // 5 fps
         // ---------------------------
 
         // Initialize events
