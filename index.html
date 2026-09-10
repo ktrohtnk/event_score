@@ -9,7 +9,8 @@
     <style>
         /* Base styling */
         body {
-            background-color: #a88a68; /* Muted, dull cardboard */
+            background-color: #9c846b; /* Even more muted vintage kraft */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
             font-family: sans-serif;
             margin: 0;
             padding: 0;
@@ -20,7 +21,10 @@
         /* UI Panel (Retro Typewriter / Form Aesthetic) */
         #ui-panel {
             width: 340px;
-            background-color: #f0cc4f; /* Vintage yellow paper */
+            background: 
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.1'/%3E%3C/svg%3E"),
+                linear-gradient(180deg, #d35400 0%, #d35400 65%, #f0cc4f 85%, #f0cc4f 100%);
+            background-color: #f0cc4f; /* Fallback */
             color: #111;
             padding: 30px 20px;
             box-sizing: border-box;
@@ -152,6 +156,7 @@
             width: 210mm;
             height: 297mm;
             background-color: #fcf9f2;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
             /* box-shadow removed for flat brutalist look */
             box-sizing: border-box;
             position: relative;
