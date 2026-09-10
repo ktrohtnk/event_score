@@ -596,12 +596,12 @@
             lctx.textAlign = 'center';
             lctx.textBaseline = 'middle';
             
-            // Line 1: CLick
+            // Line 1: CLick (Custom Pair Kerning)
             const line1 = "CLick";
             const font1 = 110;
-            const width1 = 56; // kerning for 5 letters to fit 300px
             const y1 = 55;
-            let startX1 = (logoCanvas.width - (line1.length * width1)) / 2 + (width1 / 2);
+            // 'i' is very thin, so custom X positions look much better than fixed width
+            const xPos1 = [45, 105, 145, 195, 255];
             
             for (let i = 0; i < line1.length; i++) {
                 const char = line1[i];
@@ -611,7 +611,7 @@
                 lctx.font = `${weight} ${font1}px ${fontName}`;
                 
                 lctx.save();
-                lctx.translate(startX1 + i * width1, y1);
+                lctx.translate(xPos1[i], y1);
                 
                 if (char === 'c') { lctx.scale(-1, 1); }
                 
@@ -623,12 +623,17 @@
                 lctx.restore();
             }
 
-            // Line 2: YAM
+            // Line 2: YAM (Custom Pair Kerning)
             const line2 = "YAM";
             const font2 = 125;
-            const width2 = 95; // kerning for 3 letters to fit 300px
-            const y2 = 135; // tightly packed under Line 1 (approx 0.7 line height)
-            let startX2 = (logoCanvas.width - (line2.length * width2)) / 2 + (width2 / 2);
+            const y2 = 135;
+            
+            // Y and A have diagonal strokes, so they need to be squeezed tighter than A and M.
+            const xPositions = [
+                55,   // Y center
+                135,  // A center (tucked under Y's arm)
+                245   // M center (M is wide, needs more space)
+            ];
             
             for (let i = 0; i < line2.length; i++) {
                 const char = line2[i];
@@ -638,7 +643,7 @@
                 lctx.font = `${weight} ${font2}px ${fontName}`;
                 
                 lctx.save();
-                lctx.translate(startX2 + i * width2, y2);
+                lctx.translate(xPositions[i], y2);
                 
                 // Sharp jitter
                 if (Math.random() < 0.4) {
