@@ -338,9 +338,9 @@
 
     <div id="ui-panel">
         <div class="ascii-line">==================================</div>
-        <div id="animated-logo-container" style="text-align: center; margin: 15px -20px; background-color: #111; padding: 25px 0 20px 0;">
-            <canvas id="logo-canvas" width="340" height="200" style="display: block; margin: 0 auto;"></canvas>
-            <div style="font-family: sans-serif; font-size: 0.75rem; letter-spacing: 1.5px; margin-top: 10px; color: #f0cc4f; font-weight: 900;">
+        <div id="animated-logo-container" style="text-align: center; margin: 20px 0;">
+            <canvas id="logo-canvas" width="300" height="200" style="display: block; margin: 0 auto;"></canvas>
+            <div style="font-family: sans-serif; font-size: 0.75rem; letter-spacing: 1px; margin-top: 5px; color: #111; font-weight: 900;">
                 EVENT SCORE GENERATOR
             </div>
         </div>
@@ -591,9 +591,8 @@
         ];
         
         function drawLogoFrame() {
+            lctx.clearRect(0, 0, logoCanvas.width, logoCanvas.height);
             lctx.fillStyle = '#111';
-            lctx.fillRect(0, 0, logoCanvas.width, logoCanvas.height);
-            lctx.fillStyle = '#f0cc4f';
             lctx.textAlign = 'center';
             lctx.textBaseline = 'middle';
             
@@ -602,7 +601,7 @@
             const font1 = 110;
             const y1 = 60;
             // 'i' is very thin, so custom X positions look much better than fixed width
-            const xPos1 = [65, 125, 165, 215, 275];
+            const xPos1 = [45, 105, 145, 195, 255];
             
             for (let i = 0; i < line1.length; i++) {
                 const char = line1[i];
@@ -631,9 +630,9 @@
             
             // Y and A have diagonal strokes, so they need to be squeezed tighter than A and M.
             const xPositions = [
-                80,   // Y center
-                160,  // A center
-                260   // M center
+                60,   // Y center
+                140,  // A center
+                240   // M center
             ];
             
             for (let i = 0; i < line2.length; i++) {
