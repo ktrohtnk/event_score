@@ -552,19 +552,22 @@
             const footerEl = document.getElementById('score-footer');
             footerEl.style.marginLeft = titleEl.offsetLeft + 'px';
 
-            // Temporarily remove transform to prevent html2canvas double-scaling
-            const originalTransform = paper.style.transform;
-            paper.style.transform = 'none';
-
             // Give the browser a moment to render the text and fonts, then convert to image
             setTimeout(() => {
                 html2canvas(paper, { 
                     scale: 2, // High resolution
                     useCORS: true,
-                    backgroundColor: "#fcf9f2" // Ensure background color is captured
+                    backgroundColor: "#fcf9f2", // Ensure background color is captured
+                    onclone: function(clonedDoc) {
+                        // Remove transform only inside the hidden clone to prevent double-scaling
+                        const clonedPaper = clonedDoc.getElementById('paper');
+                        if (clonedPaper) {
+                            clonedPaper.style.transform = 'none';
+                            clonedPaper.style.margin = '0';
+                        }
+                    }
                 }).then(canvas => {
                     renderedImage.src = canvas.toDataURL("image/jpeg", 0.9);
-                    paper.style.transform = originalTransform; // Restore
                     paper.style.display = 'none';
                     renderedImage.style.display = 'block';
                     document.getElementById('download-btn').disabled = false;
