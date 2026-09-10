@@ -9,7 +9,7 @@
     <style>
         /* Base styling */
         body {
-            background-color: #f0cc4f; /* Vintage yellow */
+            background-color: #f95f26; /* Vibrant orange */
             font-family: sans-serif;
             margin: 0;
             padding: 0;
@@ -27,7 +27,6 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
             z-index: 10;
             overflow-y: auto;
             font-family: "Courier New", Courier, monospace;
@@ -153,7 +152,7 @@
             width: 210mm;
             height: 297mm;
             background-color: #fcf9f2;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            /* box-shadow removed for flat brutalist look */
             box-sizing: border-box;
             position: relative;
             display: flex;
@@ -279,7 +278,6 @@
             }
             #ui-panel {
                 width: 100%;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.5);
                 z-index: 10;
             }
             #preview-area {
@@ -402,7 +400,7 @@
                 <div id="score-footer"></div>
             </div>
         </div>
-        <img id="rendered-image" style="display: none; width: 210mm; height: 297mm; box-shadow: 0 5px 15px rgba(0,0,0,0.5); object-fit: contain;">
+        <img id="rendered-image" style="display: none; width: 210mm; height: 297mm; object-fit: contain;">
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
