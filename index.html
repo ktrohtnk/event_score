@@ -652,6 +652,38 @@
                 lctx.fillText(char, 0, 0);
                 lctx.restore();
             }
+            
+            // Sharp Horizontal Slice Glitch
+            if (Math.random() < 0.4) {
+                const sliceY = Math.random() * logoCanvas.height;
+                const sliceHeight = Math.random() * 20 + 5;
+                const sliceShift = (Math.random() > 0.5 ? 1 : -1) * (Math.random() * 15 + 5);
+                const sliceData = lctx.getImageData(0, sliceY, logoCanvas.width, sliceHeight);
+                lctx.clearRect(0, sliceY, logoCanvas.width, sliceHeight);
+                lctx.putImageData(sliceData, sliceShift, sliceY);
+            }
+
+            // SHARP Glitch Noise 100 (Pixel block displacement without opacity loss)
+            if (Math.random() < 0.7) {
+                const imgData = lctx.getImageData(0, 0, logoCanvas.width, logoCanvas.height);
+                const data = imgData.data;
+                const pSize = 6; // slightly larger block for sharper impact
+                
+                for (let y = 0; y < logoCanvas.height; y += pSize) {
+                    for (let x = 0; x < logoCanvas.width; x += pSize) {
+                        if (Math.random() < 0.12) { // 12% chance to displace a block
+                            const i = (y * logoCanvas.width + x) * 4;
+                            const a = data[i+3];
+                            // If this block has black ink (alpha > 50)
+                            if (a > 50) {
+                                lctx.clearRect(x, y, pSize, pSize);
+                                lctx.fillStyle = '#111'; // Pure solid black (no blur/opacity)
+                                lctx.fillRect(x + (Math.random() > 0.5 ? 12 : -12), y, pSize, pSize);
+                            }
+                        }
+                    }
+                }
+            }
         }
         
         // Ensure fonts load before drawing first frame properly
