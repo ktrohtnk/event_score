@@ -149,7 +149,9 @@
             margin: 0 auto; /* Horizontally center */
             width: 210mm;
             height: 297mm;
-            zoom: 0.85; /* Slightly larger paper while keeping good margins */
+            transform: scale(0.85);
+            transform-origin: top center;
+            margin-bottom: calc(-297mm * 0.15); /* Compensate for scaled height */
             background-color: #fcf9f2;
             background-image: 
                 repeating-linear-gradient(45deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 1px, transparent 1px, transparent 3px),
@@ -291,7 +293,8 @@
                 height: calc(100vw * 1.414) !important;
                 padding: 15vw 6vw !important;
                 box-sizing: border-box;
-                zoom: 1 !important; /* Disable the desktop zoom */
+                transform: scale(1) !important;
+                margin-bottom: 0 !important;
             }
             #score-title {
                 font-size: 7.5vw;
@@ -403,7 +406,7 @@
                 <div id="score-footer"></div>
             </div>
         </div>
-        <img id="rendered-image" style="display: none; width: 210mm; height: 297mm; margin: 0 auto; zoom: 0.85; object-fit: contain;">
+        <img id="rendered-image" style="display: none; width: 210mm; height: 297mm; margin: 0 auto; transform: scale(0.85); transform-origin: top center; margin-bottom: calc(-297mm * 0.15); object-fit: contain;">
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -549,6 +552,10 @@
             const footerEl = document.getElementById('score-footer');
             footerEl.style.marginLeft = titleEl.offsetLeft + 'px';
 
+            // Temporarily remove transform to prevent html2canvas double-scaling
+            const originalTransform = paper.style.transform;
+            paper.style.transform = 'none';
+
             // Give the browser a moment to render the text and fonts, then convert to image
             setTimeout(() => {
                 html2canvas(paper, { 
@@ -557,6 +564,7 @@
                     backgroundColor: "#fcf9f2" // Ensure background color is captured
                 }).then(canvas => {
                     renderedImage.src = canvas.toDataURL("image/jpeg", 0.9);
+                    paper.style.transform = originalTransform; // Restore
                     paper.style.display = 'none';
                     renderedImage.style.display = 'block';
                     document.getElementById('download-btn').disabled = false;
