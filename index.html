@@ -283,14 +283,15 @@
                 z-index: 10;
             }
             #preview-area {
-                padding: 15px;
+                padding: 0; /* Remove padding so paper fits edge-to-edge */
             }
-            /* Scale paper down to fit mobile screen, preserving A4 ratio */
+            /* Scale paper to exactly fit mobile screen width */
             #paper, #rendered-image {
-                width: 90vw !important;
-                height: calc(90vw * 1.414) !important;
+                width: 100vw !important;
+                height: calc(100vw * 1.414) !important;
                 padding: 15vw 6vw !important;
                 box-sizing: border-box;
+                zoom: 1 !important; /* Disable the desktop zoom */
             }
             #score-title {
                 font-size: 7.5vw;
