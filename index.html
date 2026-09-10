@@ -140,7 +140,7 @@
             flex-grow: 1;
             display: block; /* Removed flex center to prevent top scroll cutoff bug */
             overflow: auto;
-            padding: 80px 20px; /* Lots of top/bottom margin */
+            padding: 120px 20px; /* Massive top/bottom margin */
             background-size: 20px 20px;
         }
 
@@ -149,6 +149,7 @@
             margin: 0 auto; /* Horizontally center */
             width: 210mm;
             height: 297mm;
+            zoom: 0.7; /* Visually scale it down so it fits nicely in window */
             background-color: #fcf9f2;
             background-image: 
                 repeating-linear-gradient(45deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 1px, transparent 1px, transparent 3px),
@@ -339,7 +340,7 @@
         <div class="ascii-line">==================================</div>
         <div id="animated-logo-container" style="text-align: center; margin: 20px 0;">
             <canvas id="logo-canvas" width="300" height="200" style="display: block; margin: 0 auto;"></canvas>
-            <div style="font-family: sans-serif; font-size: 0.75rem; letter-spacing: 1px; margin-top: 5px; color: #111; font-weight: 900;">
+            <div style="font-family: 'Barlow Condensed', 'Univers', 'Helvetica Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.5px; margin-top: -10px; color: #111; font-weight: 900;">
                 EVENT SCORE GENERATOR
             </div>
         </div>
@@ -401,7 +402,7 @@
                 <div id="score-footer"></div>
             </div>
         </div>
-        <img id="rendered-image" style="display: none; width: 210mm; height: 297mm; margin: 0 auto; object-fit: contain;">
+        <img id="rendered-image" style="display: none; width: 210mm; height: 297mm; margin: 0 auto; zoom: 0.7; object-fit: contain;">
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
