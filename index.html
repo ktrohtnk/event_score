@@ -9,7 +9,7 @@
     <style>
         /* Base styling */
         body {
-            background-color: #2c2c2c;
+            background-color: #f0cc4f; /* Vintage yellow */
             font-family: sans-serif;
             margin: 0;
             padding: 0;
@@ -144,7 +144,7 @@
             align-items: center;
             overflow: auto;
             padding: 20px;
-            background-image: radial-gradient(circle, #444 1px, transparent 1px);
+            background-image: radial-gradient(circle, rgba(0,0,0,0.15) 1px, transparent 1px);
             background-size: 20px 20px;
         }
 
@@ -339,7 +339,7 @@
     <div id="ui-panel">
         <div class="ascii-line">==================================</div>
         <div id="animated-logo-container" style="text-align: center; margin: 20px 0;">
-            <canvas id="logo-canvas" width="300" height="240" style="display: block; margin: 0 auto;"></canvas>
+            <canvas id="logo-canvas" width="300" height="200" style="display: block; margin: 0 auto;"></canvas>
             <div style="font-family: sans-serif; font-size: 0.75rem; letter-spacing: 1px; margin-top: 5px; color: #111; font-weight: 900;">
                 EVENT SCORE GENERATOR
             </div>
@@ -596,11 +596,12 @@
             lctx.textAlign = 'center';
             lctx.textBaseline = 'middle';
             
-            // Line 1: CLick (Massive)
+            // Line 1: CLick (Custom Pair Kerning)
             const line1 = "CLick";
-            const font1 = 160;
-            const y1 = 70; // Moved up
-            const xPos1 = [30, 110, 160, 220, 290];
+            const font1 = 110;
+            const y1 = 60;
+            // 'i' is very thin, so custom X positions look much better than fixed width
+            const xPos1 = [45, 105, 145, 195, 255];
             
             for (let i = 0; i < line1.length; i++) {
                 const char = line1[i];
@@ -622,14 +623,16 @@
                 lctx.restore();
             }
 
-            // Line 2: YAM (Massive)
+            // Line 2: YAM (Custom Pair Kerning)
             const line2 = "YAM";
-            const font2 = 180;
-            const y2 = 180; // Tightly packed
+            const font2 = 115;
+            const y2 = 155;
+            
+            // Y and A have diagonal strokes, so they need to be squeezed tighter than A and M.
             const xPositions = [
-                30,   // Y center
-                150,  // A center
-                280   // M center
+                60,   // Y center
+                140,  // A center
+                240   // M center
             ];
             
             for (let i = 0; i < line2.length; i++) {
