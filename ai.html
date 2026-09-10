@@ -456,8 +456,7 @@
                 
                 if (!json.success) throw new Error(json.error);
                 
-                randomSteps = json.text.split('
-').map(s => s.trim()).filter(s => s.length > 0);
+                randomSteps = json.text.split('\n').map(s => s.trim()).filter(s => s.length > 0);
             } catch (error) {
                 alert("AI生成エラー: " + error.message);
                 generateBtn.innerText = originalBtnText;
