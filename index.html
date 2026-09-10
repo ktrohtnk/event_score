@@ -144,17 +144,16 @@
         /* Preview Area */
         #preview-area {
             flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: block; /* Removed flex center to prevent top scroll cutoff bug */
             overflow: auto;
-            padding: 20px;
+            padding: 80px 20px; /* Lots of top/bottom margin */
             background-image: radial-gradient(circle, rgba(0,0,0,0.15) 1px, transparent 1px);
             background-size: 20px 20px;
         }
 
         /* A4 Paper with Texture */
         #paper {
+            margin: 0 auto; /* Horizontally center */
             width: 210mm;
             height: 297mm;
             background-color: #fcf9f2;
@@ -409,7 +408,7 @@
                 <div id="score-footer"></div>
             </div>
         </div>
-        <img id="rendered-image" style="display: none; width: 210mm; height: 297mm; object-fit: contain;">
+        <img id="rendered-image" style="display: none; width: 210mm; height: 297mm; margin: 0 auto; object-fit: contain;">
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
