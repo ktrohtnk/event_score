@@ -339,7 +339,7 @@
     <div id="ui-panel">
         <div class="ascii-line">==================================</div>
         <div id="animated-logo-container" style="text-align: center; margin: 20px 0;">
-            <canvas id="logo-canvas" width="300" height="180" style="display: block; margin: 0 auto;"></canvas>
+            <canvas id="logo-canvas" width="300" height="200" style="display: block; margin: 0 auto;"></canvas>
             <div style="font-family: sans-serif; font-size: 0.75rem; letter-spacing: 1px; margin-top: 5px; color: #111; font-weight: 900;">
                 EVENT SCORE GENERATOR
             </div>
@@ -599,7 +599,7 @@
             // Line 1: CLick (Custom Pair Kerning)
             const line1 = "CLick";
             const font1 = 110;
-            const y1 = 55;
+            const y1 = 60;
             // 'i' is very thin, so custom X positions look much better than fixed width
             const xPos1 = [45, 105, 145, 195, 255];
             
@@ -625,14 +625,14 @@
 
             // Line 2: YAM (Custom Pair Kerning)
             const line2 = "YAM";
-            const font2 = 125;
-            const y2 = 135;
+            const font2 = 115;
+            const y2 = 155;
             
             // Y and A have diagonal strokes, so they need to be squeezed tighter than A and M.
             const xPositions = [
-                55,   // Y center
-                135,  // A center (tucked under Y's arm)
-                245   // M center (M is wide, needs more space)
+                60,   // Y center
+                140,  // A center
+                240   // M center
             ];
             
             for (let i = 0; i < line2.length; i++) {
