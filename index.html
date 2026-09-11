@@ -577,6 +577,7 @@
                     paper.style.display = 'none';
                     renderedImage.style.display = 'block';
                     document.getElementById('download-btn').disabled = false;
+                    resizePaper(); // Re-apply scale to the newly visible image
                 });
             }, 300);
         }
@@ -728,7 +729,7 @@
             paper.style.marginBottom = `calc(-${paperHeight}px * ${1 - scale})`;
             
             const img = document.getElementById('rendered-image');
-            if (img && img.style.display !== 'none') {
+            if (img) {
                 img.style.transform = `scale(${scale})`;
                 img.style.marginBottom = `calc(-${paperHeight}px * ${1 - scale})`;
             }
