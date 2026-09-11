@@ -84,22 +84,37 @@
         }
 
         #generate-btn {
-            background-color: #111;
+            background-color: #080808;
             color: #f0cc4f;
             margin-top: 10px;
-            border: 2px solid #111;
-            padding: 15px;
-            font-size: 1.1rem;
-            box-shadow: 4px 4px 0px #111;
+            border: 3px solid #080808;
+            padding: 15px 10px;
+            font-size: 1.3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: none; /* Flat, brutalist look */
+            transition: all 0.1s ease;
+            cursor: pointer;
+        }
+
+        #generate-btn .manicule {
+            font-size: 2rem;
+            line-height: 0;
+            transform: translateY(-2px); /* Optical alignment */
         }
 
         #generate-btn:hover {
-            background-color: #333;
+            background-color: #f0cc4f;
+            color: #080808; /* Invert on hover like a stamped block */
         }
         
         #generate-btn:active {
-            transform: translate(4px, 4px);
-            box-shadow: none;
+            transform: scale(0.98);
         }
 
         .action-buttons {
@@ -384,7 +399,7 @@
 
         <div class="ascii-line">==================================</div>
 
-        <button id="generate-btn" onclick="generateScore()">[ GENERATE SCORE ]</button>
+        <button id="generate-btn" onclick="generateScore()"><span class="manicule">☞</span> GENERATE SCORE</button>
         
         <div class="action-buttons">
             <button id="download-btn" onclick="downloadJPG()" disabled>SAVE JPG</button>
