@@ -383,17 +383,8 @@
         <label>
             > Typography:
             <select id="font-select">
-                <option value="font-typewriter">Typewriter (Courier)</option>
-                <option value="font-univers">Univers (Sans-serif)</option>
-            </select>
-        </label>
-
-        <label>
-            > List Style:
-            <select id="list-select">
-                <option value="bullet">Bullet Points (●)</option>
-                <option value="number">Numbers (1. 2.)</option>
-                <option value="none">None (Plain Text)</option>
+                <option value="font-typewriter">Typewriter</option>
+                <option value="font-univers">Sans-serif</option>
             </select>
         </label>
 
@@ -480,7 +471,7 @@
             const author = document.getElementById('signature-input').value.trim();
             const dateStr = document.getElementById('date-input').value.trim();
             const fontSelect = document.getElementById('font-select').value;
-            const listSelect = document.getElementById('list-select').value;
+            const listSelect = "bullet";
             const isTypewriter = fontSelect === 'font-typewriter';
             
             const paper = document.getElementById('paper');
@@ -710,7 +701,7 @@
             document.getElementById('paper').className = this.value;
             generateScore();
         });
-        document.getElementById('list-select').addEventListener('change', generateScore);
+        
 
         // Generate initial score
         generateScore();
