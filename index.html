@@ -205,6 +205,7 @@
             max-width: 100%;
             color: #111;
             text-align: left;
+            margin-left: 1.5em; /* Indent the content (bullets) relative to the title */
             font-weight: 500;
             text-shadow: 
                 0.01em 0 0 #111, -0.01em 0 0 #111, 
@@ -296,6 +297,7 @@
             }
             #score-content {
                 font-size: 4vw;
+                margin-left: 1.5em;
             }
             #score-footer {
                 font-size: 3.5vw;
@@ -493,6 +495,8 @@
                 if (processedStep.length > 0) {
                     processedStep = processedStep.charAt(0).toUpperCase() + processedStep.slice(1);
                 }
+                // Break line after commas for poetic formatting
+                processedStep = processedStep.replace(/, /g, ",\n").replace(/、/g, "、\n");
 
                 const lineDiv = document.createElement('div');
                 lineDiv.className = 'score-line';
