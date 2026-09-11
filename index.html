@@ -29,7 +29,7 @@
             gap: 15px;
             z-index: 10;
             overflow-y: auto;
-            font-family: "Courier New", Courier, monospace;
+            font-family: "Courier New", Courier, "Hiragino Mincho ProN", "Yu Mincho", "MS Mincho", monospace, serif;
             border-right: 2px dashed #999;
         }
 
@@ -61,7 +61,7 @@
         }
 
         #ui-panel input[type="text"], #ui-panel select {
-            font-family: "Courier New", Courier, monospace;
+            font-family: "Courier New", Courier, "Hiragino Mincho ProN", "Yu Mincho", "MS Mincho", monospace, serif;
             padding: 8px 5px;
             font-size: 0.95rem;
             border: none;
@@ -76,7 +76,7 @@
         }
 
         #ui-panel button {
-            font-family: "Courier New", Courier, monospace;
+            font-family: "Courier New", Courier, "Hiragino Mincho ProN", "Yu Mincho", "MS Mincho", monospace, serif;
             cursor: pointer;
             transition: all 0.1s;
             text-transform: uppercase;
@@ -193,12 +193,12 @@
 
         /* Typography Options */
         .font-univers {
-            font-family: "Univers", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-family: "Univers", "Helvetica Neue", Helvetica, Arial, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
             letter-spacing: 0.5px;
         }
 
         .font-typewriter {
-            font-family: "Courier New", Courier, monospace;
+            font-family: "Courier New", Courier, "Hiragino Mincho ProN", "Yu Mincho", "MS Mincho", monospace, serif;
             letter-spacing: 0px;
         }
 
@@ -284,6 +284,9 @@
         /* Typewriter/Print Misalignment Effect */
         .char {
             display: inline-block;
+        }
+        .ja-char {
+            font-size: 0.87em; /* Makes Japanese slightly smaller to balance with Latin */
         }
 
         /* Mobile Responsiveness */
@@ -475,8 +478,12 @@
                         const shiftX = (Math.random() * maxShift - maxShift/2).toFixed(2); 
                         const rotate = (Math.random() * maxRotate * 2 - maxRotate).toFixed(2);
                         const opacity = (Math.random() * (1 - minOpacity) + minOpacity).toFixed(2);
+                        
+                        // Check if Japanese character (Hiragana, Katakana, Kanji, full-width punctuation)
+                        const isJapanese = /[\u3000-\u303F\u3040-\u309F\u30A0-\u30FF\uFF00-\uFFEF\u4E00-\u9FAF]/.test(char);
+                        const jaClass = isJapanese ? ' ja-char' : '';
 
-                        resultHTML += `<span class="char" style="transform: translate(${shiftX}px, ${shiftY}px) rotate(${rotate}deg); opacity: ${opacity};">${char}</span>`;
+                        resultHTML += `<span class="char${jaClass}" style="transform: translate(${shiftX}px, ${shiftY}px) rotate(${rotate}deg); opacity: ${opacity};">${char}</span>`;
                     }
                     resultHTML += `</span>`;
                 }
