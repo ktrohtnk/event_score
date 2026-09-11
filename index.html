@@ -384,7 +384,7 @@
         
         <label>
             > Event Name:
-            <input type="text" id="event-input" placeholder="WATER EVENT" value="WATER EVENT" onfocus="if(this.value==='WATER EVENT') this.value='';" onblur="if(this.value==='') this.value='WATER EVENT';">
+            <input type="text" id="event-input" placeholder="e.g. WATER EVENT" value="">
         </label>
 
         <label>
@@ -394,7 +394,7 @@
 
         <label>
             > Date/Season:
-            <input type="text" id="date-input" placeholder="Summer, 2026" value="Summer, 2026" onfocus="if(this.value==='Summer, 2026') this.value='';" onblur="if(this.value==='') this.value='Summer, 2026';">
+            <input type="text" id="date-input" placeholder="e.g. Summer, 2026" value="">
         </label>
 
         <div class="ascii-line">----------------------------------</div>
@@ -513,10 +513,10 @@
 
             // Process title
             let title = input.toUpperCase();
-            if (!title) title = "EVENT";
+            if (!title) title = "WATER EVENT";
             
             // Extract the noun, preserving the original casing typed by the user
-            let noun = input.replace(/ EVENT$/i, '').trim();
+            let noun = input ? input.replace(/ EVENT$/i, '').trim() : "water";
             if (!noun) noun = "it";            
             
             // Process steps from random template
