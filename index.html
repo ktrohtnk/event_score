@@ -549,6 +549,28 @@
 
             
 
+            // Dynamically set left padding so the TITLE is perfectly centered on the paper.
+            // The content and footer will follow this left edge.
+            const container = document.getElementById('score-container');
+            const titleEl = document.getElementById('score-title');
+            
+            // Reset padding to measure natural width
+            container.style.paddingLeft = '0px';
+            container.style.paddingRight = '0px';
+            
+            // We need to wait a tiny bit for the browser to apply the new font before measuring
+            setTimeout(() => {
+                // Calculate padding to center the title
+                // We use offsetWidth since it's relative to the unscaled layout
+                const availableWidth = container.clientWidth;
+                const tWidth = titleEl.offsetWidth;
+                let leftPad = (availableWidth - tWidth) / 2;
+                if (leftPad < 0) leftPad = 0;
+                
+                container.style.paddingLeft = leftPad + 'px';
+                container.style.paddingRight = '0px'; // allow text to flow freely to the paper's right margin
+            }, 50);
+
             // Give the browser a moment to render the text and fonts, then convert to image
             setTimeout(() => {
                 html2canvas(paper, { 
