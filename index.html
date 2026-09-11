@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Score Generator</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Barlow+Condensed:wght@900&family=Boogaloo&family=Ewert&family=Finger+Paint&family=Fjalla+One&family=Fredoka+One&family=Lilita+One&family=Lobster&family=Luckiest+Guy&family=Oswald:wght@700&family=Paytone+One&family=Permanent+Marker&family=Playfair+Display&family=Rock+Salt&family=Rye&family=Sancreek&family=Six+Caps&family=Ultra&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Barlow+Condensed:wght@900&family=Boogaloo&family=Ewert&family=Finger+Paint&family=Fjalla+One&family=Fredoka+One&family=Lilita+One&family=Lobster&family=Luckiest+Guy&family=Oswald:wght@700&family=Paytone+One&family=Permanent+Marker&family=Playfair+Display&family=Rock+Salt&family=Rye&family=Sancreek&family=Six+Caps&family=Ultra&display=swap&family=Rye&family=Sancreek" rel="stylesheet">
     <style>
         /* Base styling */
         body {
@@ -357,7 +357,7 @@
         <div class="ascii-line">==================================</div>
         <div id="animated-logo-container" style="text-align: center; margin: 20px 0;">
             <canvas id="logo-canvas" width="300" height="200" style="display: block; margin: 0 auto;"></canvas>
-            <div style="display: inline-block; font-family: 'Barlow Condensed', 'Univers', 'Helvetica Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.5px; margin-top: 0px; color: #111; font-weight: 900;">
+            <div style="display: inline-block; font-family: 'Barlow Condensed', 'Univers', 'Helvetica Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.5px; margin-top: 0px; color: #111; font-weight:  600; margin-left: 12px;">
                 EVENT SCORE GENERATOR
             </div>
         </div>
@@ -621,7 +621,7 @@
             lctx.textBaseline = 'middle';
             
             // Line 1: CLick (Custom Pair Kerning)
-            const line1 = "CLick";
+            const line1 = "CLICK";
             const font1 = 110;
             const y1 = 60;
             // 'i' is very thin, so custom X positions look much better than fixed width
@@ -629,15 +629,11 @@
             
             for (let i = 0; i < line1.length; i++) {
                 const char = line1[i];
-                const font = fluxFonts[Math.floor(Math.random() * fluxFonts.length)];
-                const weight = font.split(' ')[0];
-                const fontName = font.substring(font.indexOf('"'));
-                lctx.font = `${weight} ${font1}px ${fontName}`;
+                lctx.font = `400 ${font1}px "Rye", "Playbill", "Sancreek", serif`;
                 
                 lctx.save();
                 lctx.translate(xPos1[i], y1);
                 
-                if (char === 'c') { lctx.scale(-1, 1); }
                 
                 // Sharp jitter (No opacity drop, no blur)
                 if (Math.random() < 0.4) {
@@ -661,10 +657,7 @@
             
             for (let i = 0; i < line2.length; i++) {
                 const char = line2[i];
-                const font = fluxFonts[Math.floor(Math.random() * fluxFonts.length)];
-                const weight = font.split(' ')[0];
-                const fontName = font.substring(font.indexOf('"'));
-                lctx.font = `${weight} ${font2}px ${fontName}`;
+                lctx.font = `400 ${font2}px "Rye", "Playbill", "Sancreek", serif`;
                 
                 lctx.save();
                 lctx.translate(xPositions[i], y2);
