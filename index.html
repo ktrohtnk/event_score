@@ -153,9 +153,9 @@
         /* Preview Area */
         #preview-area {
             flex-grow: 1;
-            display: block; /* Removed flex center to prevent top scroll cutoff bug */
+            display: block; 
             overflow: auto;
-            padding: 120px 20px; /* Massive top/bottom margin */
+            padding: 40px 20px; /* Reduced padding to maximize paper visibility */
             background-size: 20px 20px;
         }
 
@@ -164,9 +164,8 @@
             margin: 0 auto; /* Horizontally center */
             width: 210mm;
             height: 297mm;
-            transform: scale(0.85);
+            /* Scale is now handled dynamically by JS to fit window */
             transform-origin: top center;
-            margin-bottom: calc(-297mm * 0.15); /* Compensate for scaled height */
             background-color: #eee5d3;
             background-image: 
                 repeating-linear-gradient(45deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 1px, transparent 1px, transparent 3px),
@@ -414,7 +413,7 @@
                 <div id="score-footer"></div>
             </div>
         </div>
-        <img id="rendered-image" style="display: none; width: 210mm; height: 297mm; margin: 0 auto; transform: scale(0.85); transform-origin: top center; margin-bottom: calc(-297mm * 0.15); object-fit: contain;">
+        <img id="rendered-image" style="display: none; width: 210mm; height: 297mm; margin: 0 auto; transform-origin: top center; object-fit: contain;">
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -701,12 +700,55 @@
 
         // Initialize events
 
+        function resizePaper() {
+            if (window.innerWidth <= 768) {
+                // Mobile layout handles itself via CSS vw units
+                document.getElementById('paper').style.transform = '';
+                document.getElementById('paper').style.marginBottom = '';
+                const img = document.getElementById('rendered-image');
+                if (img) {
+                    img.style.transform = '';
+                    img.style.marginBottom = '';
+                }
+                return;
+            }
+            
+            const previewArea = document.getElementById('preview-area');
+            const availableHeight = previewArea.clientHeight - 80; // 40px top + 40px bottom padding
+            
+            const paper = document.getElementById('paper');
+            // Remove transform temporarily to get true height
+            paper.style.transform = 'none';
+            const paperHeight = paper.offsetHeight; // usually ~1122px
+            
+            let scale = availableHeight / paperHeight;
+            if (scale > 1) scale = 1; // Max 100% size
+            
+            paper.style.transform = `scale(${scale})`;
+            paper.style.marginBottom = `calc(-${paperHeight}px * ${1 - scale})`;
+            
+            const img = document.getElementById('rendered-image');
+            if (img && img.style.display !== 'none') {
+                img.style.transform = `scale(${scale})`;
+                img.style.marginBottom = `calc(-${paperHeight}px * ${1 - scale})`;
+            }
+        }
+        
+        window.addEventListener('resize', resizePaper);
+        
+        // Wait for fonts to load before initial layout, then resize
+        document.fonts.ready.then(() => {
+            resizePaper();
+            generateScore();
+        });
+
         document.getElementById('font-select').addEventListener('change', function() {
             document.getElementById('paper').className = this.value;
             generateScore();
         });
         
 
+        resizePaper();
         // Generate initial score
         generateScore();
     </script>
