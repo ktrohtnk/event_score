@@ -621,7 +621,7 @@
             lctx.textBaseline = 'middle';
             
             // Line 1: CLick (Custom Pair Kerning)
-            const line1 = "CLICK";
+            const line1 = "CLick";
             const font1 = 110;
             const y1 = 60;
             // 'i' is very thin, so custom X positions look much better than fixed width
@@ -629,11 +629,15 @@
             
             for (let i = 0; i < line1.length; i++) {
                 const char = line1[i];
-                lctx.font = `400 ${font1}px "Rye", "Playbill", "Sancreek", serif`;
+                const font = fluxFonts[Math.floor(Math.random() * fluxFonts.length)];
+                const weight = font.split(' ')[0];
+                const fontName = font.substring(font.indexOf('"'));
+                lctx.font = `${weight} ${font1}px ${fontName}`;
                 
                 lctx.save();
                 lctx.translate(xPos1[i], y1);
                 
+                if (char === 'c') { lctx.scale(-1, 1); }
                 
                 // Sharp jitter (No opacity drop, no blur)
                 if (Math.random() < 0.4) {
@@ -657,7 +661,10 @@
             
             for (let i = 0; i < line2.length; i++) {
                 const char = line2[i];
-                lctx.font = `400 ${font2}px "Rye", "Playbill", "Sancreek", serif`;
+                const font = fluxFonts[Math.floor(Math.random() * fluxFonts.length)];
+                const weight = font.split(' ')[0];
+                const fontName = font.substring(font.indexOf('"'));
+                lctx.font = `${weight} ${font2}px ${fontName}`;
                 
                 lctx.save();
                 lctx.translate(xPositions[i], y2);
