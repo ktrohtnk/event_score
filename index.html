@@ -215,21 +215,18 @@
 
         .score-line {
             display: flex;
-            align-items: flex-start;
+            align-items: baseline; /* Perfectly align the bullet with the first line's text */
             margin-bottom: 0.2em;
         }
         
         .bullet-mark, .number-mark {
             flex-shrink: 0;
-            margin-right: 15px;
+            margin-right: 8px; /* Reduce horizontal gap so it sits closer to text */
             line-height: 1;
-            margin-top: 0.25em;
         }
         
         .bullet-mark {
-            font-size: 2em; /* Make it as big as a capital letter */
-            margin-top: 0; /* Reset inherited em margin */
-            transform: translateY(-3px); /* Nudge to align with capital letters */
+            font-size: 1.5em; /* 2em was too huge relative to baseline, 1.5em fits cap-height naturally */
         }
 
         /* Signature and Date */
