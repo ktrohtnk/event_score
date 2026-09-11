@@ -493,8 +493,6 @@
                 if (processedStep.length > 0) {
                     processedStep = processedStep.charAt(0).toUpperCase() + processedStep.slice(1);
                 }
-                // Break line after commas for poetic formatting
-                processedStep = processedStep.replace(/, /g, ",\n").replace(/、/g, "、\n");
 
                 const lineDiv = document.createElement('div');
                 lineDiv.className = 'score-line';
