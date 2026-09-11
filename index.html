@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Score Generator</title>
+    <title>event_score</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Barlow+Condensed:wght@900&family=Boogaloo&family=Ewert&family=Finger+Paint&family=Fjalla+One&family=Fredoka+One&family=Lilita+One&family=Lobster&family=Luckiest+Guy&family=Oswald:wght@700&family=Paytone+One&family=Permanent+Marker&family=Playfair+Display&family=Rock+Salt&family=Rye&family=Sancreek&family=Six+Caps&family=Ultra&display=swap&family=Rye&family=Sancreek" rel="stylesheet">
     <style>
@@ -443,12 +443,9 @@
             const img = document.getElementById('rendered-image');
             if (!img.src || img.src === "") return;
             
-            const titleInput = document.getElementById('event-input').value.trim();
-            let fileName = titleInput ? titleInput.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase() : "event";
-            
             const a = document.createElement('a');
             a.href = img.src;
-            a.download = `fluxus_${fileName}.jpg`;
+            a.download = `event_score.jpg`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
