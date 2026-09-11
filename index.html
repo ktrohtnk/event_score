@@ -718,9 +718,20 @@
             const availableHeight = previewArea.clientHeight - 80; // 40px top + 40px bottom padding
             
             const paper = document.getElementById('paper');
-            // Remove transform temporarily to get true height
+            const img = document.getElementById('rendered-image');
+            
+            // Remove transforms temporarily to get true height
             paper.style.transform = 'none';
-            const paperHeight = paper.offsetHeight; // usually ~1122px
+            if (img) img.style.transform = 'none';
+            
+            // If paper is display:none, its offsetHeight is 0. Fall back to img or 1122.
+            let paperHeight = paper.offsetHeight; 
+            if (paperHeight === 0 && img) {
+                paperHeight = img.offsetHeight;
+            }
+            if (paperHeight === 0) {
+                paperHeight = 1122.5; // fallback for 297mm at 96dpi
+            }
             
             let scale = availableHeight / paperHeight;
             if (scale > 1) scale = 1; // Max 100% size
@@ -728,7 +739,6 @@
             paper.style.transform = `scale(${scale})`;
             paper.style.marginBottom = `calc(-${paperHeight}px * ${1 - scale})`;
             
-            const img = document.getElementById('rendered-image');
             if (img) {
                 img.style.transform = `scale(${scale})`;
                 img.style.marginBottom = `calc(-${paperHeight}px * ${1 - scale})`;
