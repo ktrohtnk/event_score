@@ -567,13 +567,12 @@
             });
 
             // Process footer (Signature and Date)
+            const finalDate = dateStr || "Summer, 2026";
             let footerText = "";
-            if (author && dateStr) {
-                footerText = author + "\n" + dateStr;
-            } else if (author) {
-                footerText = author;
-            } else if (dateStr) {
-                footerText = dateStr;
+            if (author) {
+                footerText = author + "\n" + finalDate;
+            } else {
+                footerText = finalDate;
             }
 
             // Apply analog typewriter distortion
