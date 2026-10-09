@@ -593,11 +593,17 @@
                         }
                     }
                 }).then(canvas => {
-                    renderedImage.src = canvas.toDataURL("image/jpeg", 0.9);
-                    paper.style.display = 'none';
-                    renderedImage.style.display = 'block';
-                    document.getElementById('download-btn').disabled = false;
-                    resizePaper(); // Re-apply scale to the newly visible image
+                    canvas.toBlob((blob) => {
+                        // Revoke old blob to prevent memory leaks on mobile
+                        if (renderedImage.src && renderedImage.src.startsWith('blob:')) {
+                            URL.revokeObjectURL(renderedImage.src);
+                        }
+                        renderedImage.src = URL.createObjectURL(blob);
+                        paper.style.display = 'none';
+                        renderedImage.style.display = 'block';
+                        document.getElementById('download-btn').disabled = false;
+                        resizePaper(); // Re-apply scale to the newly visible image
+                    }, "image/jpeg", 0.9);
                 });
             }, 300);
         }
